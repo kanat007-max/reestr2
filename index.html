@@ -383,35 +383,28 @@ let pendingPhoto = null; // {name, data (base64), mimeType}
 let pendingDocs  = [];   // [{name, data, mimeType}]
 let currentCardSubjId = null;
 
-// ---- API (GET + callback для обхода CORS) ----
+// ---- API (JSONP для обхода CORS) ----
 async function api(params) {
   setSyncing(true);
   return new Promise((resolve) => {
-    // Уникальное имя callback-функции
-    const cbName = "_gsCallback_" + Date.now() + "_" + Math.floor(Math.random()*9999);
-
-    // Кодируем данные в URL параметр
+    const cbName = "_gsCallback_" + Date.now() + "_" + Math.floor(Math.random()*99999);
     const action = params.action;
-    const dataCopy = Object.assign({}, params);
-    delete dataCopy.action;
 
-    // Для login передаём email/pass напрямую, остальное — в data
-    let urlParams = "?action=" + encodeURIComponent(action) + "&callback=" + cbName;
-    if (action === "login") {
-      urlParams += "&data=" + encodeURIComponent(JSON.stringify({email: params.email, pass: params.pass}));
-    } else {
-      urlParams += "&data=" + encodeURIComponent(JSON.stringify(dataCopy));
-    }
+    // Все данные кроме action упаковываем в один объект data
+    const dataObj = Object.assign({}, params);
+    delete dataObj.action;
 
-    const url = API_URL + urlParams;
+    const url = API_URL
+      + "?action=" + encodeURIComponent(action)
+      + "&data="   + encodeURIComponent(JSON.stringify(dataObj))
+      + "&callback=" + cbName;
 
-    // Таймаут 15 секунд
     const timer = setTimeout(() => {
       cleanup();
       setSyncing(false, true);
       toast("Превышено время ожидания. Проверьте подключение.", "error");
-      resolve({ok: false, error: "timeout"});
-    }, 15000);
+      resolve({ ok: false, error: "timeout" });
+    }, 20000);
 
     function cleanup() {
       try { document.head.removeChild(script); } catch(e) {}
@@ -419,20 +412,18 @@ async function api(params) {
       clearTimeout(timer);
     }
 
-    // JSONP callback
-    window[cbName] = function(data) {
+    window[cbName] = function(result) {
       cleanup();
       setSyncing(false);
-      resolve(data);
+      resolve(result);
     };
 
-    // Создаём script тег
     const script = document.createElement("script");
     script.onerror = function() {
       cleanup();
       setSyncing(false, true);
       toast("Ошибка сети. Проверьте URL скрипта.", "error");
-      resolve({ok: false, error: "network error"});
+      resolve({ ok: false, error: "network error" });
     };
     script.src = url;
     document.head.appendChild(script);
@@ -639,7 +630,7 @@ async function saveSubject() {
   // Загрузить фото
   let photoUrl = editSubjId ? (subjects.find(s=>s.id===editSubjId)||{}).photo||"" : "";
   if (pendingPhoto) {
-    const r=await api({action:"uploadFile",name:pendingPhoto.name,data:pendingPhoto.data,mimeType:pendingPhoto.mimeType});
+    const r=await api({action:"uploadFile",name:pendingPhoto.name,fileData:pendingPhoto.data,mimeType:pendingPhoto.mimeType});
     if (r.ok) photoUrl=r.url;
   }
 
@@ -648,25 +639,25 @@ async function saveSubject() {
   if (pendingDocs.length) {
     docs=[];
     for (const d of pendingDocs) {
-      const r=await api({action:"uploadFile",name:d.name,data:d.data,mimeType:d.mimeType});
+      const r=await api({action:"uploadFile",name:d.name,fileData:d.data,mimeType:d.mimeType});
       if (r.ok) docs.push({name:d.name,url:r.url,id:r.id});
     }
   }
 
-  const data={
+  const subjPayload={
     type:document.getElementById("fType").value,
-    name,iin,
+    name:name, iin:iin,
     director:document.getElementById("fDirector").value.trim(),
     category:document.getElementById("fCategory").value,
     details:document.getElementById("fDetails").value.trim(),
-    photo:photoUrl,docs,
+    photo:photoUrl, docs:docs,
     addedAt:editSubjId?(subjects.find(s=>s.id===editSubjId)||{}).addedAt:new Date().toISOString(),
     addedBy:editSubjId?(subjects.find(s=>s.id===editSubjId)||{}).addedBy:session.email
   };
 
   const r = editSubjId
-    ? await api({action:"updateSubject",id:editSubjId,data})
-    : await api({action:"addSubject",data});
+    ? await api(Object.assign({action:"updateSubject",id:editSubjId},subjPayload))
+    : await api(Object.assign({action:"addSubject"},subjPayload));
 
   showSpinner(false);
   btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i> Сохранить';
@@ -701,7 +692,7 @@ function editSubject(id) {
 
 async function deleteSubject(id) {
   if (!confirm("Вы уверены, что хотите удалить эту запись?")) return;
-  const r=await api({action:"deleteSubject",id});
+  const r=await api({action:"deleteSubject",id:id});
   if (!r.ok){toast(r.error||"Ошибка удаления","error");return;}
   toast("Запись удалена");
   await loadSubjects();
@@ -830,7 +821,7 @@ function editUser(id) {
 async function deleteUser(id) {
   if (id===session.id){alert("Нельзя удалить самого себя");return;}
   if (!confirm("Удалить пользователя?"))return;
-  const r=await api({action:"deleteUser",id});
+  const r=await api({action:"deleteUser",id:id});
   if (!r.ok){toast(r.error||"Ошибка","error");return;}
   toast("Пользователь удалён");
   await loadUsers();
@@ -845,10 +836,10 @@ async function saveUser() {
   if (!editUserId&&!pass){errEl.textContent="Укажите пароль";return;}
   if (pass&&pass.length<6){errEl.textContent="Минимум 6 символов";return;}
   errEl.textContent="";
-  const data={email,name,role,...(pass?{pass}:{})};
+  const userPayload={email:email, name:name, role:role, ...(pass?{pass:pass}:{})};
   const r=editUserId
-    ?await api({action:"updateUser",id:editUserId,data})
-    :await api({action:"addUser",data});
+    ?await api(Object.assign({action:"updateUser",id:editUserId},userPayload))
+    :await api(Object.assign({action:"addUser"},userPayload));
   if (!r.ok){errEl.textContent=r.error||"Ошибка";return;}
   toast(editUserId?"Пользователь обновлён":"Пользователь добавлен");
   closeModal("userModal");
