@@ -369,7 +369,7 @@ tr:hover td{background:#1e2235}
 // ============================================================
 //  КОНФИГУРАЦИЯ — вставьте сюда URL вашего Apps Script
 // ============================================================
-const API_URL = "https://script.google.com/macros/s/AKfycbzyU4rp_RSU1dZS4JQHflCdNJSNqJ0ZU5TnwKPYdIJ8B0xER2Wx6NUjP9_n1jrhaXJ5/exec";
+const API_URL = "ВСТАВЬТЕ_СЮДА_URL_ВАШЕГО_APPS_SCRIPT";
 // Пример: "https://script.google.com/macros/s/AKfycb.../exec"
 // ============================================================
 
@@ -383,23 +383,60 @@ let pendingPhoto = null; // {name, data (base64), mimeType}
 let pendingDocs  = [];   // [{name, data, mimeType}]
 let currentCardSubjId = null;
 
-// ---- API ----
+// ---- API (GET + callback для обхода CORS) ----
 async function api(params) {
   setSyncing(true);
-  try {
-    const res  = await fetch(API_URL, {
-      method:  "POST",
-      body:    JSON.stringify(params),
-      headers: {"Content-Type":"application/json"}
-    });
-    const json = await res.json();
-    setSyncing(false);
-    return json;
-  } catch(e) {
-    setSyncing(false, true);
-    toast("Ошибка сети: " + e.message, "error");
-    return {ok:false, error:e.message};
-  }
+  return new Promise((resolve) => {
+    // Уникальное имя callback-функции
+    const cbName = "_gsCallback_" + Date.now() + "_" + Math.floor(Math.random()*9999);
+
+    // Кодируем данные в URL параметр
+    const action = params.action;
+    const dataCopy = Object.assign({}, params);
+    delete dataCopy.action;
+
+    // Для login передаём email/pass напрямую, остальное — в data
+    let urlParams = "?action=" + encodeURIComponent(action) + "&callback=" + cbName;
+    if (action === "login") {
+      urlParams += "&data=" + encodeURIComponent(JSON.stringify({email: params.email, pass: params.pass}));
+    } else {
+      urlParams += "&data=" + encodeURIComponent(JSON.stringify(dataCopy));
+    }
+
+    const url = API_URL + urlParams;
+
+    // Таймаут 15 секунд
+    const timer = setTimeout(() => {
+      cleanup();
+      setSyncing(false, true);
+      toast("Превышено время ожидания. Проверьте подключение.", "error");
+      resolve({ok: false, error: "timeout"});
+    }, 15000);
+
+    function cleanup() {
+      try { document.head.removeChild(script); } catch(e) {}
+      try { delete window[cbName]; } catch(e) {}
+      clearTimeout(timer);
+    }
+
+    // JSONP callback
+    window[cbName] = function(data) {
+      cleanup();
+      setSyncing(false);
+      resolve(data);
+    };
+
+    // Создаём script тег
+    const script = document.createElement("script");
+    script.onerror = function() {
+      cleanup();
+      setSyncing(false, true);
+      toast("Ошибка сети. Проверьте URL скрипта.", "error");
+      resolve({ok: false, error: "network error"});
+    };
+    script.src = url;
+    document.head.appendChild(script);
+  });
 }
 
 // ---- SYNC INDICATOR ----
