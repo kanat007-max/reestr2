@@ -6,47 +6,38 @@
 <title>Реестр неблагонадёжных субъектов</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-/* ===== RESET & BASE ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;font-size:14px}
-
-/* ===== LAYOUT ===== */
 .app{min-height:100vh;display:flex;flex-direction:column}
 .hidden{display:none!important}
 
-/* ===== LOGIN ===== */
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;background:#0f1117}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
 .login-card{background:#1a1d27;border:0.5px solid #2d3148;border-radius:12px;padding:2rem;width:100%;max-width:400px}
 .login-header{text-align:center;margin-bottom:1.5rem}
 .login-badge{display:inline-flex;align-items:center;gap:6px;background:#3d1a1a;color:#f87171;font-size:12px;padding:4px 10px;border-radius:6px;margin-bottom:1rem}
 .login-header h1{font-size:18px;font-weight:500;color:#e2e8f0;margin-bottom:4px}
 .login-header p{font-size:13px;color:#8892a4}
 
-/* ===== HEADER ===== */
 .header{background:#13151f;border-bottom:0.5px solid #2d3148;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:52px;flex-shrink:0}
 .header h1{font-size:15px;font-weight:500;flex:1;color:#e2e8f0}
 .user-info{font-size:13px;color:#8892a4;display:flex;align-items:center;gap:8px}
 .role-badge{font-size:11px;padding:2px 8px;border-radius:6px;background:#1a2540;color:#7eb3f5}
 .role-badge.admin{background:#3d1a1a;color:#f87171}
 
-/* ===== NAV ===== */
 .nav{background:#13151f;border-bottom:0.5px solid #2d3148;padding:0 1.5rem;display:flex}
 .nav-tab{padding:10px 16px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:#8892a4;user-select:none}
 .nav-tab.active{color:#e2e8f0;border-bottom-color:#4f5a8a;font-weight:500}
 
-/* ===== CONTENT ===== */
 .content{padding:1.5rem;flex:1}
 
-/* ===== FORMS ===== */
 .field{margin-bottom:1rem}
-.field label{display:block;font-size:12px;color:#8892a4;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
+.field label{display:block;font-size:11px;color:#8892a4;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
 .field input,.field select,.field textarea{width:100%;padding:8px 10px;border:0.5px solid #2d3148;border-radius:6px;font-size:14px;background:#252836;color:#e2e8f0;outline:none;font-family:inherit}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:#4f5a8a}
 .field input[type=file]{padding:6px 10px;cursor:pointer}
 .field textarea{resize:vertical;min-height:80px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 
-/* ===== BUTTONS ===== */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:0.5px solid #2d3148;border-radius:6px;font-size:13px;cursor:pointer;background:#1a1d27;color:#e2e8f0;transition:background .15s;font-family:inherit}
 .btn:hover{background:#252836}.btn:active{transform:scale(.98)}
 .btn-primary{background:#1e2440;border-color:#4f5a8a;color:#a5b4fc;font-weight:500}
@@ -56,19 +47,16 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .btn-full{width:100%;justify-content:center;padding:9px}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 
-/* ===== ALERTS ===== */
 .err{color:#f87171;font-size:13px;margin-top:6px;display:none}
 .err.show{display:block}
 .warn-box{background:#3d2c08;border:0.5px solid #7c5c10;border-radius:6px;padding:10px 12px;font-size:13px;color:#fbbf24;margin-top:6px;display:none}
 .warn-box.show{display:block}
 
-/* ===== TOOLBAR ===== */
 .toolbar{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
 .search-box{flex:1;min-width:200px;position:relative}
 .search-box i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:16px;color:#8892a4;pointer-events:none}
 .search-box input{padding-left:34px}
 
-/* ===== TABLE ===== */
 .table-wrap{background:#1a1d27;border:0.5px solid #2d3148;border-radius:12px;overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:#13151f;padding:9px 12px;text-align:left;font-weight:500;font-size:11px;color:#8892a4;border-bottom:0.5px solid #2d3148;text-transform:uppercase;letter-spacing:.04em}
@@ -76,7 +64,6 @@ td{padding:9px 12px;border-bottom:0.5px solid #1e2235;vertical-align:middle;colo
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#1e2235}
 
-/* ===== BADGES ===== */
 .cat-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px}
 .cat-fraud{background:#3d1f10;color:#fb923c}
 .cat-contract{background:#0f2340;color:#60a5fa}
@@ -86,12 +73,10 @@ tr:hover td{background:#1e2235}
 .cat-other{background:#1e2235;color:#94a3b8}
 .type-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;background:#1e2235;color:#94a3b8}
 
-/* ===== IMAGES ===== */
 .img-thumb{width:40px;height:40px;object-fit:cover;border-radius:6px;border:0.5px solid #2d3148}
 .img-placeholder{width:40px;height:40px;border-radius:6px;border:0.5px solid #2d3148;background:#252836;display:flex;align-items:center;justify-content:center;font-size:18px;color:#4f5a8a}
 .file-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 7px;background:#252836;border-radius:4px;margin:2px;color:#94a3b8}
 
-/* ===== MODALS ===== */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem}
 .modal{background:#1a1d27;border:0.5px solid #2d3148;border-radius:12px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto}
 .modal-header{padding:1rem 1.25rem;border-bottom:0.5px solid #2d3148;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#1a1d27;z-index:1}
@@ -99,7 +84,22 @@ tr:hover td{background:#1e2235}
 .modal-body{padding:1.25rem}
 .modal-footer{padding:.875rem 1.25rem;border-top:0.5px solid #2d3148;display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:#1a1d27}
 
-/* ===== CARD MODAL ===== */
+/* Upload progress */
+.upload-zone{border:1.5px dashed #2d3148;border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:border-color .2s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:#4f5a8a;background:#1e2235}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-zone p{font-size:13px;color:#8892a4;pointer-events:none}
+.upload-zone i{font-size:24px;color:#4f5a8a;display:block;margin-bottom:6px;pointer-events:none}
+.upload-list{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.upload-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#13151f;border-radius:6px;border:0.5px solid #2d3148;font-size:12px}
+.upload-item-name{flex:1;color:#e2e8f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upload-item-status{font-size:11px;flex-shrink:0}
+.upload-item-status.uploading{color:#fbbf24}
+.upload-item-status.done{color:#4ade80}
+.upload-item-status.error{color:#f87171}
+.upload-progress{height:2px;background:#4ade80;border-radius:2px;margin-top:3px;transition:width .3s}
+
+/* Card modal */
 .card-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;z-index:200;padding:1.5rem;overflow-y:auto}
 .card-wrap{background:#1a1d27;border:0.5px solid #2d3148;border-radius:12px;width:100%;max-width:740px}
 .card-bar{padding:.875rem 1.25rem;border-bottom:0.5px solid #2d3148;display:flex;align-items:center;gap:8px;position:sticky;top:0;background:#1a1d27;border-radius:12px 12px 0 0;z-index:1}
@@ -119,14 +119,14 @@ tr:hover td{background:#1e2235}
 .card-val{color:#e2e8f0}
 .card-detail-box{font-size:13px;color:#cbd5e1;line-height:1.7;white-space:pre-wrap;background:#13151f;border-radius:6px;padding:10px 12px;border:0.5px solid #2d3148}
 .files-list{display:flex;flex-direction:column;gap:6px}
-.file-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#13151f;border:0.5px solid #2d3148;border-radius:6px;cursor:pointer;transition:background .12s}
+.file-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#13151f;border:0.5px solid #2d3148;border-radius:6px;cursor:pointer;transition:background .12s;text-decoration:none}
 .file-row:hover{background:#1e2235}
 .file-row-icon{font-size:20px;color:#60a5fa;flex-shrink:0}
 .file-row-name{font-size:13px;color:#e2e8f0;flex:1;word-break:break-all}
 .file-row-ext{font-size:10px;color:#8892a4;text-transform:uppercase;background:#252836;padding:2px 6px;border-radius:4px;flex-shrink:0}
 .no-files{font-size:13px;color:#4f5a8a;font-style:italic}
 
-/* ===== FILE VIEWER ===== */
+/* File viewer */
 .fv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);display:flex;flex-direction:column;z-index:300}
 .fv-bar{background:#13151f;border-bottom:0.5px solid #2d3148;padding:10px 1.25rem;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .fv-bar span{flex:1;font-size:13px;color:#e2e8f0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -136,25 +136,23 @@ tr:hover td{background:#1e2235}
 .fv-ph{text-align:center;color:#8892a4}
 .fv-ph i{font-size:52px;display:block;margin-bottom:1rem;color:#4f5a8a}
 
-/* ===== SPINNER / TOAST ===== */
-.spinner-wrap{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:999}
+/* Spinner / Toast */
+.spinner-wrap{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:1rem}
 .spinner{width:40px;height:40px;border:3px solid #2d3148;border-top-color:#a5b4fc;border-radius:50%;animation:spin .8s linear infinite}
+.spinner-label{color:#a5b4fc;font-size:14px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1e2440;border:0.5px solid #4f5a8a;color:#a5b4fc;padding:10px 16px;border-radius:8px;font-size:13px;z-index:9999;display:flex;align-items:center;gap:8px;transition:opacity .3s}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1e2440;border:0.5px solid #4f5a8a;color:#a5b4fc;padding:10px 16px;border-radius:8px;font-size:13px;z-index:9999;display:flex;align-items:center;gap:8px;max-width:340px}
 .toast.error{background:#3d1a1a;border-color:#6b2c2c;color:#f87171}
 .toast.success{background:#0f2a1a;border-color:#1a5c35;color:#4ade80}
 
-/* ===== SYNC INDICATOR ===== */
 .sync-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0}
 .sync-dot.syncing{background:#fbbf24;animation:pulse 1s infinite}
 .sync-dot.error{background:#f87171}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ===== EMPTY STATE ===== */
 .empty{text-align:center;padding:3rem;color:#8892a4;font-size:14px}
 .empty i{font-size:36px;display:block;margin-bottom:.75rem;color:#4f5a8a}
 
-/* ===== PRINT ===== */
 @media print{
   body{background:#fff!important;color:#000!important}
   .card-overlay{position:static!important;background:none!important;padding:0!important;display:block!important;overflow:visible!important}
@@ -168,8 +166,7 @@ tr:hover td{background:#1e2235}
   .cat-badge,.type-badge,.card-iin{background:#f0f0f0!important;color:#000!important;border:1px solid #ccc!important}
   .card-detail-box{background:#f9f9f9!important;color:#000!important;border-color:#ddd!important}
   .file-row{background:#f5f5f5!important;border-color:#ddd!important}
-  .file-row-name{color:#000!important}
-  .card-photo-ph{background:#f0f0f0!important;color:#666!important}
+  .file-row-name,.file-row-ext{color:#000!important}
   .app,.nav,.header,.fv-overlay,.modal-overlay,.spinner-wrap,.toast{display:none!important}
   .print-footer{display:block!important}
 }
@@ -202,7 +199,7 @@ tr:hover td{background:#1e2235}
       <i class="ti ti-shield-exclamation" style="font-size:20px;color:#f87171"></i>
       <h1>Реестр неблагонадёжных субъектов</h1>
       <div class="user-info">
-        <div class="sync-dot" id="syncDot" title="Синхронизация"></div>
+        <div class="sync-dot" id="syncDot"></div>
         <span id="userNameDisplay"></span>
         <span class="role-badge" id="userRoleBadge"></span>
         <button class="btn" onclick="doLogout()" style="padding:4px 10px;font-size:12px"><i class="ti ti-logout"></i> Выйти</button>
@@ -213,8 +210,6 @@ tr:hover td{background:#1e2235}
       <div class="nav-tab hidden" id="usersTab" onclick="switchTab('users',this)"><i class="ti ti-users"></i> Пользователи</div>
     </div>
     <div class="content">
-
-      <!-- SUBJECTS -->
       <div id="subjectsView">
         <div class="toolbar">
           <div class="search-box"><i class="ti ti-search"></i><input type="text" id="searchInput" placeholder="Поиск по наименованию, ФИО или ИИН/БИН..." oninput="renderSubjects()"></div>
@@ -237,8 +232,6 @@ tr:hover td{background:#1e2235}
           </table>
         </div>
       </div>
-
-      <!-- USERS -->
       <div id="usersView" class="hidden">
         <div class="toolbar">
           <div style="font-size:14px;font-weight:500;flex:1">Управление пользователями</div>
@@ -251,7 +244,6 @@ tr:hover td{background:#1e2235}
           </table>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -282,33 +274,58 @@ tr:hover td{background:#1e2235}
           </select>
         </div>
       </div>
-      <div class="field"><label>Наименование / ФИО *</label><input type="text" id="fName" placeholder="Полное наименование или ФИО"></div>
+      <div class="field"><label>Наименование / ФИО *</label>
+        <input type="text" id="fName" placeholder="Полное наименование или ФИО">
+      </div>
       <div class="two-col">
         <div class="field">
           <label>ИИН / БИН * (12 цифр)</label>
           <input type="text" id="fIin" maxlength="12" placeholder="000000000000" oninput="checkIin()">
           <div class="warn-box" id="iinWarn">⚠️ Этот ИИН/БИН уже занесен в базу! Повторное добавление запрещено</div>
         </div>
-        <div class="field" id="directorField"><label>Руководитель ФИО</label><input type="text" id="fDirector" placeholder="Фамилия Имя Отчество"></div>
-      </div>
-      <div class="field"><label>Детали инцидента</label><textarea id="fDetails" placeholder="Опишите подробности инцидента..."></textarea></div>
-      <div class="two-col">
-        <div class="field">
-          <label>Фото / Логотип</label>
-          <input type="file" id="fPhoto" accept="image/*" onchange="onPhotoChange(this)">
-          <div id="photoPreview" style="margin-top:6px"></div>
-        </div>
-        <div class="field">
-          <label>Документы (PDF, DOCX)</label>
-          <input type="file" id="fDocs" accept=".pdf,.docx" multiple onchange="onDocsChange(this)">
-          <div id="docsPreview" style="margin-top:6px"></div>
+        <div class="field" id="directorField"><label>Руководитель ФИО</label>
+          <input type="text" id="fDirector" placeholder="Фамилия Имя Отчество">
         </div>
       </div>
+      <div class="field"><label>Детали инцидента</label>
+        <textarea id="fDetails" placeholder="Опишите подробности инцидента..."></textarea>
+      </div>
+
+      <!-- ФОТО -->
+      <div class="field">
+        <label>Фото / Логотип</label>
+        <div class="upload-zone" id="photoZone"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="onDrop(event,'photo')">
+          <input type="file" accept="image/*" onchange="onFileSelect(this,'photo')">
+          <i class="ti ti-photo"></i>
+          <p>Нажмите или перетащите фото сюда<br><span style="font-size:11px;color:#4f5a8a">JPG, PNG, GIF — до 5 МБ</span></p>
+        </div>
+        <div class="upload-list" id="photoList"></div>
+      </div>
+
+      <!-- ДОКУМЕНТЫ -->
+      <div class="field">
+        <label>Прикреплённые документы</label>
+        <div class="upload-zone" id="docsZone"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="onDrop(event,'docs')">
+          <input type="file" accept=".pdf,.docx,.doc,.xlsx,.xls,.png,.jpg" multiple onchange="onFileSelect(this,'docs')">
+          <i class="ti ti-file-upload"></i>
+          <p>Нажмите или перетащите файлы сюда<br><span style="font-size:11px;color:#4f5a8a">PDF, DOCX, XLSX — до 10 МБ каждый</span></p>
+        </div>
+        <div class="upload-list" id="docsList"></div>
+      </div>
+
       <div class="err" id="subjectErr"></div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('subjectModal')">Отмена</button>
-      <button class="btn btn-primary" id="saveSubjectBtn" onclick="saveSubject()"><i class="ti ti-device-floppy"></i> Сохранить</button>
+      <button class="btn btn-primary" id="saveSubjectBtn" onclick="saveSubject()">
+        <i class="ti ti-device-floppy"></i> Сохранить
+      </button>
     </div>
   </div>
 </div>
@@ -340,7 +357,7 @@ tr:hover td{background:#1e2235}
 
 <!-- SUBJECT CARD -->
 <div class="card-overlay hidden" id="cardOverlay">
-  <div class="card-wrap" id="cardWrap">
+  <div class="card-wrap">
     <div class="card-bar">
       <i class="ti ti-id-badge-2" style="font-size:18px;color:#a5b4fc"></i>
       <h2>Карточка субъекта</h2>
@@ -363,34 +380,38 @@ tr:hover td{background:#1e2235}
 </div>
 
 <!-- SPINNER -->
-<div class="spinner-wrap hidden" id="spinnerWrap"><div class="spinner"></div></div>
+<div class="spinner-wrap hidden" id="spinnerWrap">
+  <div class="spinner"></div>
+  <div class="spinner-label" id="spinnerLabel">Загрузка...</div>
+</div>
 
 <script>
 // ============================================================
-//  КОНФИГУРАЦИЯ — вставьте сюда URL вашего Apps Script
+//  КОНФИГУРАЦИЯ
 // ============================================================
-const API_URL = "https://script.google.com/macros/s/AKfycbzyU4rp_RSU1dZS4JQHflCdNJSNqJ0ZU5TnwKPYdIJ8B0xER2Wx6NUjP9_n1jrhaXJ5/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby8sOT1h1Ng73Vpr-PnJdA1jdCd7-73TLi7Dj04oDZik9XFDn1aZQ8Jv54vd9QKBJ_P/exec";
 // Пример: "https://script.google.com/macros/s/AKfycb.../exec"
 // ============================================================
 
 const CAT_LABELS = {contract:"Нарушение договора",fraud:"Мошенничество",debt:"Финансовый долг",blacklist:"Черный список поставщиков",theft:"Кража",other:"Другое"};
 const CAT_CLS    = {contract:"cat-contract",fraud:"cat-fraud",debt:"cat-debt",blacklist:"cat-black",theft:"cat-theft",other:"cat-other"};
 
-let subjects = [], users = [];
-let session  = null;
-let editSubjId = null, editUserId = null;
-let pendingPhoto = null; // {name, data (base64), mimeType}
-let pendingDocs  = [];   // [{name, data, mimeType}]
-let currentCardSubjId = null;
+let subjects=[], users=[];
+let session=null;
+let editSubjId=null, editUserId=null;
+let driveFolderId=null; // ID папки на Google Drive
 
-// ---- API (JSONP для обхода CORS) ----
+// Хранит загруженные файлы: {photo: {name,url,id} | null, docs: [{name,url,id}]}
+let uploadedFiles = { photo: null, docs: [] };
+
+// ============================================================
+//  JSONP API
+// ============================================================
 async function api(params) {
   setSyncing(true);
   return new Promise((resolve) => {
-    const cbName = "_gsCallback_" + Date.now() + "_" + Math.floor(Math.random()*99999);
+    const cbName = "_cb_" + Date.now() + "_" + Math.floor(Math.random()*99999);
     const action = params.action;
-
-    // Все данные кроме action упаковываем в один объект data
     const dataObj = Object.assign({}, params);
     delete dataObj.action;
 
@@ -400,74 +421,303 @@ async function api(params) {
       + "&callback=" + cbName;
 
     const timer = setTimeout(() => {
-      cleanup();
-      setSyncing(false, true);
-      toast("Превышено время ожидания. Проверьте подключение.", "error");
-      resolve({ ok: false, error: "timeout" });
+      cleanup(); setSyncing(false,true);
+      toast("Превышено время ожидания","error");
+      resolve({ok:false,error:"timeout"});
     }, 20000);
 
     function cleanup() {
-      try { document.head.removeChild(script); } catch(e) {}
-      try { delete window[cbName]; } catch(e) {}
+      try{document.head.removeChild(script);}catch(e){}
+      try{delete window[cbName];}catch(e){}
       clearTimeout(timer);
     }
 
-    window[cbName] = function(result) {
-      cleanup();
-      setSyncing(false);
-      resolve(result);
-    };
+    window[cbName] = (result) => { cleanup(); setSyncing(false); resolve(result); };
 
     const script = document.createElement("script");
-    script.onerror = function() {
-      cleanup();
-      setSyncing(false, true);
-      toast("Ошибка сети. Проверьте URL скрипта.", "error");
-      resolve({ ok: false, error: "network error" });
+    script.onerror = () => {
+      cleanup(); setSyncing(false,true);
+      toast("Ошибка сети","error");
+      resolve({ok:false,error:"network"});
     };
     script.src = url;
     document.head.appendChild(script);
   });
 }
 
-// ---- SYNC INDICATOR ----
-function setSyncing(on, err) {
-  const d = document.getElementById("syncDot");
-  d.className = "sync-dot" + (err ? " error" : on ? " syncing" : "");
+// ============================================================
+//  ЗАГРУЗКА ФАЙЛОВ НАПРЯМУЮ В GOOGLE DRIVE API
+// ============================================================
+async function uploadFileToDrive(file) {
+  // Шаг 1: получить folderId если ещё нет
+  if (!driveFolderId) {
+    const r = await api({action:"getFolderId"});
+    if (!r.ok) return {ok:false, error:"Не удалось получить папку: "+r.error};
+    driveFolderId = r.folderId;
+  }
+
+  // Шаг 2: загрузить файл через Google Drive API (multipart upload)
+  // Для этого нужен OAuth токен — получаем через Google Identity Services
+  const token = await getGoogleToken();
+  if (!token) return {ok:false, error:"Не удалось получить токен авторизации Google"};
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const base64 = e.target.result.split(",")[1];
+        const byteArray = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+
+        // Метаданные файла
+        const metadata = {
+          name: file.name,
+          parents: [driveFolderId]
+        };
+
+        // Multipart boundary
+        const boundary = "-------rnbs_upload_" + Date.now();
+        const delimiter = "\r\n--" + boundary + "\r\n";
+        const closeDelim = "\r\n--" + boundary + "--";
+
+        const metaPart = delimiter
+          + "Content-Type: application/json\r\n\r\n"
+          + JSON.stringify(metadata);
+
+        const enc = new TextEncoder();
+        const metaBytes = enc.encode(metaPart);
+        const filePart = enc.encode(
+          "\r\n--" + boundary + "\r\n"
+          + "Content-Type: " + (file.type || "application/octet-stream") + "\r\n\r\n"
+        );
+        const closeBytes = enc.encode(closeDelim);
+
+        const body = new Uint8Array(metaBytes.length + filePart.length + byteArray.length + closeBytes.length);
+        let offset = 0;
+        body.set(metaBytes, offset); offset += metaBytes.length;
+        body.set(filePart, offset);  offset += filePart.length;
+        body.set(byteArray, offset); offset += byteArray.length;
+        body.set(closeBytes, offset);
+
+        const res = await fetch(
+          "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink,webContentLink",
+          {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + token,
+              "Content-Type": "multipart/related; boundary=" + boundary
+            },
+            body: body
+          }
+        );
+
+        if (!res.ok) {
+          const err = await res.text();
+          resolve({ok:false, error:"Drive API: "+err});
+          return;
+        }
+
+        const data = await res.json();
+
+        // Сделать файл публичным
+        await fetch(
+          "https://www.googleapis.com/drive/v3/files/" + data.id + "/permissions",
+          {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + token,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({role:"reader", type:"anyone"})
+          }
+        );
+
+        const url = "https://drive.google.com/uc?export=view&id=" + data.id;
+        resolve({ok:true, url:url, id:data.id, name:file.name});
+
+      } catch(err) {
+        resolve({ok:false, error:err.message});
+      }
+    };
+    reader.onerror = () => resolve({ok:false, error:"Ошибка чтения файла"});
+    reader.readAsDataURL(file);
+  });
 }
 
-// ---- SPINNER ----
-function showSpinner(on) { document.getElementById("spinnerWrap").classList.toggle("hidden", !on); }
+// ============================================================
+//  GOOGLE OAUTH TOKEN (через GIS — Google Identity Services)
+// ============================================================
+let _tokenClient = null;
+let _currentToken = null;
+let _tokenExpiry  = 0;
+let _tokenResolve = null;
 
-// ---- TOAST ----
+// CLIENT_ID берётся из Google Cloud Console
+// Инструкция как получить — в README
+const GOOGLE_CLIENT_ID = "595784746393-p08k3sds2oih59mqoj2lkr3pmsbvhkuh.apps.googleusercontent.com";
+
+function loadGIS() {
+  return new Promise((resolve) => {
+    if (window.google && window.google.accounts) { resolve(); return; }
+    const s = document.createElement("script");
+    s.src = "https://accounts.google.com/gsi/client";
+    s.onload = resolve;
+    document.head.appendChild(s);
+  });
+}
+
+async function getGoogleToken() {
+  // Если токен ещё действителен — вернуть его
+  if (_currentToken && Date.now() < _tokenExpiry - 60000) return _currentToken;
+
+  await loadGIS();
+
+  return new Promise((resolve) => {
+    _tokenResolve = resolve;
+
+    if (!_tokenClient) {
+      _tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: "https://www.googleapis.com/auth/drive.file",
+        callback: (resp) => {
+          if (resp.error) { if(_tokenResolve){_tokenResolve(null);_tokenResolve=null;} return; }
+          _currentToken = resp.access_token;
+          _tokenExpiry  = Date.now() + (resp.expires_in * 1000);
+          if (_tokenResolve) { _tokenResolve(_currentToken); _tokenResolve=null; }
+        }
+      });
+    }
+
+    // Если токен есть — requestAccessToken с prompt пустым (тихо обновит)
+    _tokenClient.requestAccessToken({prompt: _currentToken ? "" : "none"});
+
+    // Fallback: если через 3 сек не ответил — запросить с диалогом
+    setTimeout(() => {
+      if (_tokenResolve) {
+        _tokenClient.requestAccessToken({prompt: "consent"});
+      }
+    }, 3000);
+  });
+}
+
+// ============================================================
+//  DRAG & DROP + ВЫБОР ФАЙЛОВ
+// ============================================================
+function onDrop(event, type) {
+  event.preventDefault();
+  document.getElementById(type==="photo"?"photoZone":"docsZone").classList.remove("drag");
+  const files = Array.from(event.dataTransfer.files);
+  processFiles(files, type);
+}
+
+function onFileSelect(input, type) {
+  const files = Array.from(input.files);
+  processFiles(files, type);
+  input.value = ""; // сброс чтобы можно было выбрать тот же файл снова
+}
+
+function processFiles(files, type) {
+  if (type === "photo") {
+    const file = files[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { toast("Выберите файл изображения","error"); return; }
+    if (file.size > 5*1024*1024) { toast("Фото не должно превышать 5 МБ","error"); return; }
+    addUploadItem("photoList", file, type);
+  } else {
+    files.forEach(file => {
+      if (file.size > 10*1024*1024) { toast(file.name + ": файл превышает 10 МБ","error"); return; }
+      addUploadItem("docsList", file, type);
+    });
+  }
+}
+
+function addUploadItem(listId, file, type) {
+  const listEl = document.getElementById(listId);
+  const itemId = "upitem_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+
+  const ext = file.name.split(".").pop().toUpperCase();
+  const icon = file.type.startsWith("image/") ? "ti-photo"
+             : ext==="PDF" ? "ti-file-type-pdf"
+             : "ti-file-type-doc";
+
+  const div = document.createElement("div");
+  div.className = "upload-item";
+  div.id = itemId;
+  div.innerHTML = `
+    <i class="ti ${icon}" style="font-size:16px;color:#60a5fa;flex-shrink:0"></i>
+    <div style="flex:1;min-width:0">
+      <div class="upload-item-name">${file.name}</div>
+      <div class="upload-progress" id="prog_${itemId}" style="width:0%"></div>
+    </div>
+    <span class="upload-item-status uploading" id="status_${itemId}">⏳ Загружается...</span>
+  `;
+  listEl.appendChild(div);
+
+  // Начать загрузку
+  uploadFileToDrive(file).then(result => {
+    const statusEl = document.getElementById("status_"+itemId);
+    const progEl   = document.getElementById("prog_"+itemId);
+    if (result.ok) {
+      statusEl.textContent = "✓ Загружено";
+      statusEl.className = "upload-item-status done";
+      progEl.style.width = "100%";
+      // Сохраняем результат
+      if (type === "photo") {
+        uploadedFiles.photo = {name:result.name, url:result.url, id:result.id};
+      } else {
+        uploadedFiles.docs.push({name:result.name, url:result.url, id:result.id});
+      }
+    } else {
+      statusEl.textContent = "✗ Ошибка";
+      statusEl.className = "upload-item-status error";
+      div.title = result.error;
+      toast("Ошибка загрузки: " + result.error, "error");
+    }
+  });
+}
+
+// ============================================================
+//  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ============================================================
+function setSyncing(on, err) {
+  const d = document.getElementById("syncDot");
+  if (d) d.className = "sync-dot" + (err?" error":on?" syncing":"");
+}
+
+function showSpinner(on, label) {
+  document.getElementById("spinnerWrap").classList.toggle("hidden", !on);
+  if (label) document.getElementById("spinnerLabel").textContent = label;
+}
+
 function toast(msg, type="success") {
   const el = document.createElement("div");
   el.className = "toast " + type;
   el.innerHTML = `<i class="ti ti-${type==="error"?"alert-circle":type==="success"?"check":"info-circle"}"></i>${msg}`;
   document.body.appendChild(el);
-  setTimeout(() => { el.style.opacity="0"; setTimeout(()=>el.remove(),400); }, 3000);
+  setTimeout(()=>{ el.style.opacity="0"; setTimeout(()=>el.remove(),400); }, 3500);
 }
 
-// ---- SESSION ----
-function saveSession(u) { session=u; localStorage.setItem("rnbs_session", JSON.stringify(u)); }
-function loadSession() { try { session = JSON.parse(localStorage.getItem("rnbs_session")||"null"); } catch(e){} }
-function clearSession() { session=null; localStorage.removeItem("rnbs_session"); }
+function saveSession(u){ session=u; localStorage.setItem("rnbs_s",JSON.stringify(u)); }
+function loadSession(){ try{session=JSON.parse(localStorage.getItem("rnbs_s")||"null");}catch(e){} }
+function clearSession(){ session=null; localStorage.removeItem("rnbs_s"); }
 
-// ---- INIT ----
+// ============================================================
+//  ИНИЦИАЛИЗАЦИЯ
+// ============================================================
 async function init() {
   loadSession();
+
   if (!API_URL || API_URL.includes("ВСТАВЬТЕ")) {
     document.getElementById("loginView").innerHTML = `
       <div style="text-align:center;padding:3rem;max-width:500px;margin:auto">
         <i class="ti ti-settings" style="font-size:48px;color:#4f5a8a;display:block;margin-bottom:1rem"></i>
         <h2 style="color:#e2e8f0;margin-bottom:.75rem">Требуется настройка</h2>
-        <p style="color:#8892a4;line-height:1.7">Откройте файл <code style="background:#252836;padding:2px 6px;border-radius:4px">index.html</code> в текстовом редакторе и замените <code style="background:#252836;padding:2px 6px;border-radius:4px">ВСТАВЬТЕ_СЮДА_URL_ВАШЕГО_APPS_SCRIPT</code> на URL вашего Google Apps Script.<br><br>Следуйте прилагаемой инструкции.</p>
+        <p style="color:#8892a4;line-height:1.7">Откройте <code style="background:#252836;padding:2px 6px;border-radius:4px">index.html</code> и замените <code style="background:#252836;padding:2px 6px;border-radius:4px">ВСТАВЬТЕ_СЮДА_URL_ВАШЕГО_APPS_SCRIPT</code> на URL вашего Apps Script,
+        а <code style="background:#252836;padding:2px 6px;border-radius:4px">ВСТАВЬТЕ_GOOGLE_CLIENT_ID</code> на ваш Google OAuth Client ID.<br><br>Следуйте инструкции.</p>
       </div>`;
     return;
   }
-  if (session) {
-    showMain();
-  }
+
+  if (session) showMain();
 }
 
 function showMain() {
@@ -476,74 +726,77 @@ function showMain() {
   mv.classList.remove("hidden"); mv.style.display="flex";
   document.getElementById("userNameDisplay").textContent = session.name;
   const rb = document.getElementById("userRoleBadge");
-  rb.textContent = session.role==="admin" ? "Администратор" : "Оператор";
-  rb.className = "role-badge" + (session.role==="admin"?" admin":"");
+  rb.textContent = session.role==="admin"?"Администратор":"Оператор";
+  rb.className = "role-badge"+(session.role==="admin"?" admin":"");
   document.getElementById("usersTab").classList.toggle("hidden", session.role!=="admin");
+
+  // Загружаем folderId заранее
+  api({action:"getFolderId"}).then(r=>{ if(r.ok) driveFolderId=r.folderId; });
   loadSubjects();
 }
 
 async function doLogin() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass  = document.getElementById("loginPass").value;
-  const btn   = document.getElementById("loginBtn");
-  const errEl = document.getElementById("loginErr");
-  if (!email||!pass) { errEl.textContent="Заполните все поля"; errEl.classList.add("show"); return; }
+  const email=document.getElementById("loginEmail").value.trim();
+  const pass=document.getElementById("loginPass").value;
+  const errEl=document.getElementById("loginErr");
+  if(!email||!pass){errEl.textContent="Заполните все поля";errEl.classList.add("show");return;}
+  const btn=document.getElementById("loginBtn");
   btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin .8s linear infinite"></i> Вход...';
-  const r = await api({action:"login", email, pass});
+  const r=await api({action:"login",email,pass});
   btn.disabled=false; btn.innerHTML='<i class="ti ti-login"></i> Войти';
-  if (!r.ok) { errEl.textContent=r.error||"Ошибка"; errEl.classList.add("show"); return; }
+  if(!r.ok){errEl.textContent=r.error||"Ошибка";errEl.classList.add("show");return;}
   errEl.classList.remove("show");
   saveSession(r.data);
   showMain();
 }
 
-function doLogout() { clearSession(); location.reload(); }
+function doLogout(){ clearSession(); location.reload(); }
 
-// ---- TABS ----
-function switchTab(tab, el) {
+function switchTab(tab,el){
   document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
   el.classList.add("active");
-  document.getElementById("subjectsView").classList.toggle("hidden", tab!=="subjects");
-  document.getElementById("usersView").classList.toggle("hidden", tab!=="users");
-  if (tab==="users") loadUsers();
+  document.getElementById("subjectsView").classList.toggle("hidden",tab!=="subjects");
+  document.getElementById("usersView").classList.toggle("hidden",tab!=="users");
+  if(tab==="users") loadUsers();
 }
 
-function openModal(id)  { document.getElementById(id).classList.remove("hidden"); }
-function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+function openModal(id){document.getElementById(id).classList.remove("hidden");}
+function closeModal(id){document.getElementById(id).classList.add("hidden");}
 
-// ---- LOAD SUBJECTS ----
+// ============================================================
+//  СУБЪЕКТЫ
+// ============================================================
 async function loadSubjects() {
-  const r = await api({action:"getSubjects"});
-  if (!r.ok) { toast(r.error||"Ошибка загрузки", "error"); return; }
-  subjects = r.data || [];
+  const r=await api({action:"getSubjects"});
+  if(!r.ok){toast(r.error||"Ошибка загрузки","error");return;}
+  subjects=r.data||[];
   renderSubjects();
 }
 
 function renderSubjects() {
-  const q = (document.getElementById("searchInput").value||"").toLowerCase();
-  const isAdmin = session && session.role==="admin";
-  const rows = subjects.filter(s=>!q || s.name.toLowerCase().includes(q) || String(s.iin).includes(q));
-  const tbody = document.getElementById("subjectsBody");
-  if (!rows.length) {
+  const q=(document.getElementById("searchInput").value||"").toLowerCase();
+  const isAdmin=session&&session.role==="admin";
+  const rows=subjects.filter(s=>!q||s.name.toLowerCase().includes(q)||String(s.iin).includes(q));
+  const tbody=document.getElementById("subjectsBody");
+  if(!rows.length){
     tbody.innerHTML=`<tr><td colspan="8"><div class="empty"><i class="ti ti-database-off"></i>${q?"Ничего не найдено":"База данных пуста. Добавьте первый субъект."}</div></td></tr>`;
     return;
   }
-  tbody.innerHTML = rows.map(s => {
-    const img = s.photo
-      ? `<img src="${s.photo}" class="img-thumb" onerror="this.outerHTML='<div class=img-placeholder><i class=ti ti-user></i></div>'">`
-      : `<div class="img-placeholder"><i class="ti ti-${s.type==="legal"?"building":"user"}"></i></div>`;
-    const docs = Array.isArray(s.docs) ? s.docs : [];
-    const adminBtns = isAdmin
-      ? `<button class="btn" onclick="editSubject('${s.id}')" style="padding:4px 7px" title="Редактировать"><i class="ti ti-edit"></i></button>
-         <button class="btn btn-danger" onclick="deleteSubject('${s.id}')" style="padding:4px 7px;margin-left:3px" title="Удалить"><i class="ti ti-trash"></i></button>`
-      : "";
-    return `<tr>
+  tbody.innerHTML=rows.map(s=>{
+    const img=s.photo
+      ?`<img src="${s.photo}" class="img-thumb" onerror="this.outerHTML='<div class=img-placeholder><i class=ti ti-${s.type==="legal"?"building":"user"}></i></div>'">`
+      :`<div class="img-placeholder"><i class="ti ti-${s.type==="legal"?"building":"user"}"></i></div>`;
+    const docs=Array.isArray(s.docs)?s.docs:[];
+    const adminBtns=isAdmin
+      ?`<button class="btn" onclick="editSubject('${s.id}')" style="padding:4px 7px" title="Редактировать"><i class="ti ti-edit"></i></button>
+        <button class="btn btn-danger" onclick="deleteSubject('${s.id}')" style="padding:4px 7px;margin-left:3px" title="Удалить"><i class="ti ti-trash"></i></button>`:"";
+    return`<tr>
       <td>${img}</td>
       <td><a href="#" onclick="openCard('${s.id}');return false" style="color:#a5b4fc;text-decoration:none;font-weight:500">${s.name}</a></td>
       <td><span class="type-badge">${s.type==="individual"?"Физ. лицо":"Юр. лицо"}</span></td>
       <td style="font-family:monospace;color:#94a3b8;font-size:12px">${s.iin}</td>
       <td><span class="cat-badge ${CAT_CLS[s.category]}">${CAT_LABELS[s.category]}</span></td>
-      <td style="font-size:12px;color:#8892a4">${s.addedAt ? new Date(s.addedAt).toLocaleDateString("ru-RU") : "—"}</td>
+      <td style="font-size:12px;color:#8892a4">${s.addedAt?new Date(s.addedAt).toLocaleDateString("ru-RU"):"—"}</td>
       <td style="font-size:12px;color:#8892a4">${s.addedBy||"—"}</td>
       <td style="white-space:nowrap">
         <button class="btn" onclick="openCard('${s.id}')" style="padding:4px 7px" title="Карточка"><i class="ti ti-id-badge-2"></i></button>
@@ -553,124 +806,91 @@ function renderSubjects() {
   }).join("");
 }
 
-// ---- ADD / EDIT SUBJECT ----
 function openAddSubject() {
-  editSubjId=null; pendingPhoto=null; pendingDocs=[];
+  editSubjId=null;
+  uploadedFiles={photo:null, docs:[]};
   document.getElementById("subjectModalTitle").textContent="Добавить субъект";
   ["fType","fCategory","fName","fIin","fDirector","fDetails"].forEach(id=>{
     const el=document.getElementById(id);
-    if(el.tagName==="SELECT")el.selectedIndex=0; else el.value="";
+    if(el.tagName==="SELECT") el.selectedIndex=0; else el.value="";
   });
-  document.getElementById("fPhoto").value="";
-  document.getElementById("fDocs").value="";
-  document.getElementById("photoPreview").innerHTML="";
-  document.getElementById("docsPreview").innerHTML="";
+  document.getElementById("photoList").innerHTML="";
+  document.getElementById("docsList").innerHTML="";
   document.getElementById("iinWarn").classList.remove("show");
   document.getElementById("saveSubjectBtn").disabled=false;
   document.getElementById("subjectErr").textContent="";
+  document.getElementById("subjectErr").style.display="none";
   toggleDirectorField();
   openModal("subjectModal");
 }
 
-function toggleDirectorField() {
+function toggleDirectorField(){
   document.getElementById("directorField").classList.toggle("hidden", document.getElementById("fType").value!=="legal");
 }
 
-function checkIin() {
-  const v = document.getElementById("fIin").value.trim();
-  const dup = v.length===12 && subjects.find(s=>s.iin===v && s.id!==editSubjId);
-  document.getElementById("iinWarn").classList.toggle("show", !!dup);
-  document.getElementById("saveSubjectBtn").disabled = !!dup;
+function checkIin(){
+  const v=document.getElementById("fIin").value.trim();
+  const dup=v.length===12&&subjects.find(s=>s.iin===v&&s.id!==editSubjId);
+  document.getElementById("iinWarn").classList.toggle("show",!!dup);
+  document.getElementById("saveSubjectBtn").disabled=!!dup;
 }
 
-function readFileAsBase64(file) {
-  return new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=e=>res(e.target.result);
-    r.onerror=rej;
-    r.readAsDataURL(file);
-  });
-}
-
-async function onPhotoChange(input) {
-  if (input.files && input.files[0]) {
-    const f=input.files[0];
-    const data=await readFileAsBase64(f);
-    pendingPhoto={name:f.name,data,mimeType:f.type};
-    document.getElementById("photoPreview").innerHTML=`<img src="${data}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:0.5px solid #2d3148;margin-top:4px">`;
-  }
-}
-
-async function onDocsChange(input) {
-  pendingDocs=[];
-  document.getElementById("docsPreview").innerHTML="";
-  if (input.files) {
-    for (const f of Array.from(input.files)) {
-      const data=await readFileAsBase64(f);
-      pendingDocs.push({name:f.name,data,mimeType:f.type});
-      document.getElementById("docsPreview").innerHTML+=`<span class="file-tag"><i class="ti ti-file"></i>${f.name}</span>`;
-    }
-  }
-}
-
-async function saveSubject() {
+async function saveSubject(){
   const name=document.getElementById("fName").value.trim();
   const iin=document.getElementById("fIin").value.trim();
   const errEl=document.getElementById("subjectErr");
-  if (!name){errEl.textContent="Укажите наименование или ФИО";return;}
-  if (!iin||iin.length!==12||!/^\d+$/.test(iin)){errEl.textContent="ИИН/БИН должен содержать ровно 12 цифр";return;}
-  if (subjects.find(s=>s.iin===iin&&s.id!==editSubjId)){errEl.textContent="Этот ИИН/БИН уже существует";return;}
-  errEl.textContent="";
+
+  if(!name){errEl.textContent="Укажите наименование или ФИО";errEl.style.display="block";return;}
+  if(!iin||iin.length!==12||!/^\d+$/.test(iin)){errEl.textContent="ИИН/БИН должен содержать ровно 12 цифр";errEl.style.display="block";return;}
+  if(subjects.find(s=>s.iin===iin&&s.id!==editSubjId)){errEl.textContent="Этот ИИН/БИН уже существует";errEl.style.display="block";return;}
+  errEl.style.display="none";
+
+  // Проверяем — есть ли файлы ещё в процессе загрузки
+  const uploading = document.querySelectorAll(".upload-item-status.uploading");
+  if(uploading.length>0){
+    errEl.textContent="Подождите, файлы ещё загружаются...";
+    errEl.style.display="block";
+    return;
+  }
 
   const btn=document.getElementById("saveSubjectBtn");
   btn.disabled=true; btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin .8s linear infinite"></i> Сохраняем...';
 
-  showSpinner(true);
+  const orig=editSubjId?subjects.find(s=>s.id===editSubjId)||{}:{};
 
-  // Загрузить фото
-  let photoUrl = editSubjId ? (subjects.find(s=>s.id===editSubjId)||{}).photo||"" : "";
-  if (pendingPhoto) {
-    const r=await api({action:"uploadFile",name:pendingPhoto.name,fileData:pendingPhoto.data,mimeType:pendingPhoto.mimeType});
-    if (r.ok) photoUrl=r.url;
-  }
+  // Фото: если новое загружено — берём его, иначе оставляем старое
+  const photoUrl = uploadedFiles.photo ? uploadedFiles.photo.url : (orig.photo||"");
+  // Документы: если новые загружены — берём их, иначе старые
+  const docs = uploadedFiles.docs.length>0 ? uploadedFiles.docs : (orig.docs||[]);
 
-  // Загрузить документы
-  let docs=editSubjId?(subjects.find(s=>s.id===editSubjId)||{}).docs||[]:[];
-  if (pendingDocs.length) {
-    docs=[];
-    for (const d of pendingDocs) {
-      const r=await api({action:"uploadFile",name:d.name,fileData:d.data,mimeType:d.mimeType});
-      if (r.ok) docs.push({name:d.name,url:r.url,id:r.id});
-    }
-  }
-
-  const subjPayload={
-    type:document.getElementById("fType").value,
-    name:name, iin:iin,
-    director:document.getElementById("fDirector").value.trim(),
-    category:document.getElementById("fCategory").value,
-    details:document.getElementById("fDetails").value.trim(),
-    photo:photoUrl, docs:docs,
-    addedAt:editSubjId?(subjects.find(s=>s.id===editSubjId)||{}).addedAt:new Date().toISOString(),
-    addedBy:editSubjId?(subjects.find(s=>s.id===editSubjId)||{}).addedBy:session.email
+  const payload = {
+    type:     document.getElementById("fType").value,
+    name,iin,
+    director: document.getElementById("fDirector").value.trim(),
+    category: document.getElementById("fCategory").value,
+    details:  document.getElementById("fDetails").value.trim(),
+    photo:    photoUrl,
+    docs:     docs,
+    addedAt:  editSubjId ? orig.addedAt : new Date().toISOString(),
+    addedBy:  editSubjId ? orig.addedBy : session.email
   };
 
   const r = editSubjId
-    ? await api(Object.assign({action:"updateSubject",id:editSubjId},subjPayload))
-    : await api(Object.assign({action:"addSubject"},subjPayload));
+    ? await api(Object.assign({action:"updateSubject",id:editSubjId},payload))
+    : await api(Object.assign({action:"addSubject"},payload));
 
-  showSpinner(false);
   btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i> Сохранить';
 
-  if (!r.ok){errEl.textContent=r.error||"Ошибка сохранения";return;}
+  if(!r.ok){errEl.textContent=r.error||"Ошибка сохранения";errEl.style.display="block";return;}
   toast(editSubjId?"Субъект обновлён":"Субъект добавлен");
   closeModal("subjectModal");
   await loadSubjects();
 }
 
-function editSubject(id) {
+function editSubject(id){
   const s=subjects.find(x=>x.id===id);if(!s)return;
-  editSubjId=id; pendingPhoto=null; pendingDocs=[];
+  editSubjId=id;
+  uploadedFiles={photo:null, docs:[]};
   document.getElementById("subjectModalTitle").textContent="Редактировать субъект";
   document.getElementById("fType").value=s.type;
   document.getElementById("fCategory").value=s.category;
@@ -678,45 +898,65 @@ function editSubject(id) {
   document.getElementById("fIin").value=s.iin;
   document.getElementById("fDirector").value=s.director||"";
   document.getElementById("fDetails").value=s.details||"";
-  document.getElementById("fPhoto").value="";
-  document.getElementById("fDocs").value="";
-  document.getElementById("photoPreview").innerHTML=s.photo?`<img src="${s.photo}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:0.5px solid #2d3148">`:""  ;
-  const docs=Array.isArray(s.docs)?s.docs:[];
-  document.getElementById("docsPreview").innerHTML=docs.map(d=>`<span class="file-tag"><i class="ti ti-file"></i>${d.name||d}</span>`).join("");
+
+  // Показываем существующие файлы
+  const photoList=document.getElementById("photoList");
+  photoList.innerHTML="";
+  if(s.photo){
+    photoList.innerHTML=`<div class="upload-item">
+      <i class="ti ti-photo" style="font-size:16px;color:#60a5fa;flex-shrink:0"></i>
+      <div style="flex:1;min-width:0"><div class="upload-item-name">Текущее фото</div></div>
+      <span class="upload-item-status done">✓ Сохранено</span>
+    </div>`;
+  }
+
+  const docsList=document.getElementById("docsList");
+  docsList.innerHTML="";
+  (Array.isArray(s.docs)?s.docs:[]).forEach(d=>{
+    docsList.innerHTML+=`<div class="upload-item">
+      <i class="ti ti-file" style="font-size:16px;color:#60a5fa;flex-shrink:0"></i>
+      <div style="flex:1;min-width:0"><div class="upload-item-name">${d.name||d}</div></div>
+      <span class="upload-item-status done">✓ Сохранено</span>
+    </div>`;
+  });
+
   document.getElementById("iinWarn").classList.remove("show");
   document.getElementById("saveSubjectBtn").disabled=false;
   document.getElementById("subjectErr").textContent="";
+  document.getElementById("subjectErr").style.display="none";
   toggleDirectorField();
   openModal("subjectModal");
 }
 
-async function deleteSubject(id) {
-  if (!confirm("Вы уверены, что хотите удалить эту запись?")) return;
+async function deleteSubject(id){
+  if(!confirm("Вы уверены, что хотите удалить эту запись?"))return;
   const r=await api({action:"deleteSubject",id:id});
-  if (!r.ok){toast(r.error||"Ошибка удаления","error");return;}
+  if(!r.ok){toast(r.error||"Ошибка","error");return;}
   toast("Запись удалена");
   await loadSubjects();
 }
 
-// ---- CARD ----
-function openCard(id) {
+// ============================================================
+//  КАРТОЧКА СУБЪЕКТА
+// ============================================================
+function openCard(id){
   const s=subjects.find(x=>x.id===id);if(!s)return;
-  currentCardSubjId=id;
   const photoHtml=s.photo
     ?`<img src="${s.photo}" class="card-photo" onerror="this.outerHTML='<div class=card-photo-ph><i class=ti ti-${s.type==="legal"?"building":"user"}></i></div>'">`
     :`<div class="card-photo-ph"><i class="ti ti-${s.type==="legal"?"building":"user"}"></i></div>`;
   const docs=Array.isArray(s.docs)?s.docs:[];
   const docsHtml=docs.length
-    ?docs.map((d,i)=>{
-      const name=d.name||("Файл "+(i+1));
+    ?docs.map(d=>{
+      const name=d.name||"Документ";
       const ext=(name.split(".").pop()||"").toUpperCase();
-      const icon=ext==="PDF"?"ti-file-type-pdf":"ti-file-type-doc";
-      return `<div class="file-row" onclick="openFv(${i},'${id}')">
+      const icon=ext==="PDF"?"ti-file-type-pdf":d.url&&d.url.includes("image")?"ti-photo":"ti-file-type-doc";
+      const url=d.url||"#";
+      return`<a class="file-row" href="${url}" target="_blank" rel="noopener">
         <i class="ti ${icon} file-row-icon"></i>
         <span class="file-row-name">${name}</span>
-        <span class="file-row-ext">${ext}</span>
-        <span style="font-size:12px;color:#a5b4fc;margin-left:4px"><i class="ti ti-eye"></i> Открыть</span>
-      </div>`;
+        <span class="file-row-ext">${ext||"FILE"}</span>
+        <span style="font-size:12px;color:#a5b4fc;margin-left:4px;flex-shrink:0"><i class="ti ti-external-link"></i> Открыть</span>
+      </a>`;
     }).join("")
     :`<p class="no-files">Документы не прикреплены</p>`;
 
@@ -737,7 +977,7 @@ function openCard(id) {
         <span class="card-lbl">Тип субъекта</span><span class="card-val">${s.type==="legal"?"Юридическое лицо":"Физическое лицо"}</span>
         <span class="card-lbl">ИИН / БИН</span><span class="card-val" style="font-family:monospace">${s.iin}</span>
         ${s.type==="legal"?`<span class="card-lbl">Руководитель</span><span class="card-val">${s.director||"—"}</span>`:""}
-        <span class="card-lbl">Категория нарушения</span><span class="card-val"><span class="cat-badge ${CAT_CLS[s.category]}">${CAT_LABELS[s.category]}</span></span>
+        <span class="card-lbl">Категория</span><span class="card-val"><span class="cat-badge ${CAT_CLS[s.category]}">${CAT_LABELS[s.category]}</span></span>
         <span class="card-lbl">Дата добавления</span><span class="card-val">${s.addedAt?new Date(s.addedAt).toLocaleString("ru-RU"):"—"}</span>
         <span class="card-lbl">Добавил</span><span class="card-val">${s.addedBy||"—"}</span>
       </div>
@@ -747,44 +987,27 @@ function openCard(id) {
       <div class="card-sec-title">Прикреплённые документы (${docs.length})</div>
       <div class="files-list">${docsHtml}</div>
     </div>`;
-  document.getElementById("printFooter").textContent="Распечатано: "+new Date().toLocaleString("ru-RU")+" | Пользователь: "+session.email;
+
+  document.getElementById("printFooter").textContent="Распечатано: "+new Date().toLocaleString("ru-RU")+" | "+session.email;
   document.getElementById("cardOverlay").classList.remove("hidden");
 }
-function closeCard() { document.getElementById("cardOverlay").classList.add("hidden"); }
-function printCard() { window.print(); }
 
-// ---- FILE VIEWER ----
-function openFv(idx, subjId) {
-  const s=subjects.find(x=>x.id===subjId);if(!s)return;
-  const docs=Array.isArray(s.docs)?s.docs:[];
-  const d=docs[idx];if(!d)return;
-  const name=d.name||("Файл "+(idx+1));
-  const url=d.url||d.data||"";
-  const ext=(name.split(".").pop()||"").toLowerCase();
-  document.getElementById("fvName").textContent=name;
-  const body=document.getElementById("fvBody");
-  if (["jpg","jpeg","png","gif","webp","svg"].includes(ext)) {
-    body.innerHTML=`<img src="${url}" alt="${name}">`;
-  } else if (ext==="pdf") {
-    body.innerHTML=`<iframe class="fv-iframe" src="${url}"></iframe>`;
-  } else {
-    body.innerHTML=`<div class="fv-ph"><i class="ti ti-file-off"></i><p style="font-size:14px;margin-bottom:1rem">Предпросмотр недоступен для .${ext}</p><a href="${url}" target="_blank" style="color:#a5b4fc;font-size:14px"><i class="ti ti-external-link"></i> Открыть в новой вкладке</a></div>`;
-  }
-  document.getElementById("fvOverlay").classList.remove("hidden");
-}
-function closeFv() { document.getElementById("fvOverlay").classList.add("hidden"); document.getElementById("fvBody").innerHTML=""; }
+function closeCard(){ document.getElementById("cardOverlay").classList.add("hidden"); }
+function printCard(){ window.print(); }
 
-// ---- USERS ----
-async function loadUsers() {
+// ============================================================
+//  ПОЛЬЗОВАТЕЛИ
+// ============================================================
+async function loadUsers(){
   const r=await api({action:"getUsers"});
-  if (!r.ok){toast(r.error||"Ошибка","error");return;}
+  if(!r.ok){toast(r.error||"Ошибка","error");return;}
   users=r.data||[];
   renderUsers();
 }
 
-function renderUsers() {
+function renderUsers(){
   const tbody=document.getElementById("usersBody");
-  if (!users.length){tbody.innerHTML=`<tr><td colspan="4"><div class="empty"><i class="ti ti-users"></i>Нет пользователей</div></td></tr>`;return;}
+  if(!users.length){tbody.innerHTML=`<tr><td colspan="4"><div class="empty"><i class="ti ti-users"></i>Нет пользователей</div></td></tr>`;return;}
   tbody.innerHTML=users.map(u=>{
     const isSelf=u.id===session.id;
     return`<tr>
@@ -799,7 +1022,7 @@ function renderUsers() {
   }).join("");
 }
 
-function openAddUser() {
+function openAddUser(){
   editUserId=null;
   document.getElementById("userModalTitle").textContent="Добавить пользователя";
   ["uEmail","uName","uPass"].forEach(id=>document.getElementById(id).value="");
@@ -807,7 +1030,8 @@ function openAddUser() {
   document.getElementById("userErr").textContent="";
   openModal("userModal");
 }
-function editUser(id) {
+
+function editUser(id){
   const u=users.find(x=>x.id===id);if(!u)return;
   editUserId=id;
   document.getElementById("userModalTitle").textContent="Редактировать пользователя";
@@ -818,44 +1042,52 @@ function editUser(id) {
   document.getElementById("userErr").textContent="";
   openModal("userModal");
 }
-async function deleteUser(id) {
-  if (id===session.id){alert("Нельзя удалить самого себя");return;}
-  if (!confirm("Удалить пользователя?"))return;
+
+async function deleteUser(id){
+  if(id===session.id){alert("Нельзя удалить самого себя");return;}
+  if(!confirm("Удалить пользователя?"))return;
   const r=await api({action:"deleteUser",id:id});
-  if (!r.ok){toast(r.error||"Ошибка","error");return;}
+  if(!r.ok){toast(r.error||"Ошибка","error");return;}
   toast("Пользователь удалён");
   await loadUsers();
 }
-async function saveUser() {
+
+async function saveUser(){
   const email=document.getElementById("uEmail").value.trim();
   const name=document.getElementById("uName").value.trim();
   const role=document.getElementById("uRole").value;
   const pass=document.getElementById("uPass").value;
   const errEl=document.getElementById("userErr");
-  if (!email||!name){errEl.textContent="Заполните все поля";return;}
-  if (!editUserId&&!pass){errEl.textContent="Укажите пароль";return;}
-  if (pass&&pass.length<6){errEl.textContent="Минимум 6 символов";return;}
+  if(!email||!name){errEl.textContent="Заполните все поля";return;}
+  if(!editUserId&&!pass){errEl.textContent="Укажите пароль";return;}
+  if(pass&&pass.length<6){errEl.textContent="Минимум 6 символов";return;}
   errEl.textContent="";
-  const userPayload={email:email, name:name, role:role, ...(pass?{pass:pass}:{})};
+  const payload={email,name,role,...(pass?{pass}:{})};
   const r=editUserId
-    ?await api(Object.assign({action:"updateUser",id:editUserId},userPayload))
-    :await api(Object.assign({action:"addUser"},userPayload));
-  if (!r.ok){errEl.textContent=r.error||"Ошибка";return;}
+    ?await api(Object.assign({action:"updateUser",id:editUserId},payload))
+    :await api(Object.assign({action:"addUser"},payload));
+  if(!r.ok){errEl.textContent=r.error||"Ошибка";return;}
   toast(editUserId?"Пользователь обновлён":"Пользователь добавлен");
   closeModal("userModal");
   await loadUsers();
 }
 
-// ---- KEYBOARD ----
+// ============================================================
+//  КЛАВИАТУРА
+// ============================================================
 document.addEventListener("keydown",e=>{
-  if (e.key==="Escape"){
-    if (!document.getElementById("fvOverlay").classList.contains("hidden")){closeFv();return;}
-    if (!document.getElementById("cardOverlay").classList.contains("hidden")){closeCard();return;}
-    ["subjectModal","userModal"].forEach(id=>{if(!document.getElementById(id).classList.contains("hidden"))closeModal(id);});
+  if(e.key==="Escape"){
+    if(!document.getElementById("fvOverlay").classList.contains("hidden")){closeFv();return;}
+    if(!document.getElementById("cardOverlay").classList.contains("hidden")){closeCard();return;}
+    ["subjectModal","userModal"].forEach(id=>{
+      if(!document.getElementById(id).classList.contains("hidden"))closeModal(id);
+    });
   }
 });
 document.getElementById("loginPass").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
-document.getElementById("cardOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("cardOverlay"))closeCard();});
+document.getElementById("cardOverlay").addEventListener("click",e=>{
+  if(e.target===document.getElementById("cardOverlay"))closeCard();
+});
 
 init();
 </script>
