@@ -435,61 +435,65 @@ async function uploadToDropbox(file) {
 
         const uploadData = await uploadRes.json();
 
-        // Создаём публичную shared ссылку
-        const shareRes = await fetch("https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings", {
+        function normalizeDropboxUrl(url) {
+  if (!url) return "";
+  return url
+    .replace("www.dropbox.com", "dl.dropboxusercontent.com")
+    .replace("?dl=0", "?raw=1");
+}
+
+async function createDropboxLink(uploadData, file) {
+  try {
+    // Создаём публичную shared ссылку
+    const shareRes = await fetch("https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + _dbxToken,
+        "Content-Type":  "application/json"
+      },
+      body: JSON.stringify({
+        path: uploadData.path_lower,
+        settings: { requested_visibility: "public" }
+      })
+    });
+
+    let shareUrl = "";
+    if (shareRes.ok) {
+      const shareData = await shareRes.json();
+      shareUrl = normalizeDropboxUrl(shareData.url);
+    } else {
+      // Если ссылка уже существует — получаем существующую
+      const errData = await shareRes.json();
+      if (errData.error && errData.error[".tag"] === "shared_link_already_exists") {
+        const existing = await fetch("https://api.dropboxapi.com/2/sharing/list_shared_links", {
           method: "POST",
           headers: {
             "Authorization": "Bearer " + _dbxToken,
             "Content-Type":  "application/json"
           },
-          body: JSON.stringify({
-            path: uploadData.path_lower,
-            settings: { requested_visibility: "public" }
-          })
+          body: JSON.stringify({ path: uploadData.path_lower, direct_only: true })
         });
-
-        let shareUrl = "";
-        if (shareRes.ok) {
-          const shareData = await shareRes.json();
-          // Заменяем dl=0 на dl=1 для прямой ссылки (для изображений)
-          shareUrl = shareData.url.replace("?dl=0", "?raw=1");
-        } else {
-          // Если ссылка уже существует — получаем существующую
-          const errData = await shareRes.json();
-          if (errData.error && errData.error[".tag"] === "shared_link_already_exists") {
-            const existing = await fetch("https://api.dropboxapi.com/2/sharing/list_shared_links", {
-              method: "POST",
-              headers: {
-                "Authorization": "Bearer " + DROPBOX_TOKEN,
-                "Content-Type":  "application/json"
-              },
-              body: JSON.stringify({ path: uploadData.path_lower, direct_only: true })
-            });
-            if (existing.ok) {
-              const exData = await existing.json();
-              if (exData.links && exData.links[0]) {
-                shareUrl = exData.links[0].url.replace("?dl=0", "?raw=1");
-              }
-            }
+        if (existing.ok) {
+          const exData = await existing.json();
+          if (exData.links && exData.links[0]) {
+            shareUrl = normalizeDropboxUrl(exData.links[0].url);
           }
         }
-
-        if (!shareUrl) shareUrl = "https://www.dropbox.com/home" + DROPBOX_FOLDER;
-
-        resolve({
-          ok:   true,
-          url:  shareUrl,
-          name: file.name,
-          path: uploadData.path_lower
-        });
-
-      } catch(err) {
-        resolve({ ok: false, error: err.message });
       }
+    }
+
+    if (!shareUrl) shareUrl = "https://www.dropbox.com/home" + DROPBOX_FOLDER;
+
+    return {
+      ok:   true,
+      url:  shareUrl,
+      name: file.name,
+      path: uploadData.path_lower
     };
-    reader.onerror = () => resolve({ ok: false, error: "Ошибка чтения файла" });
-    reader.readAsArrayBuffer(file);
-  });
+
+  } catch(err) {
+    return { ok: false, error: err.message };
+  }
 }
 
 // ============================================================
