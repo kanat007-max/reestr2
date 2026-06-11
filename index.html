@@ -395,8 +395,7 @@ async function uploadToDropbox(file) {
         const ts = Date.now();
         // Оставляем только ASCII безопасные символы в имени файла
         const safeName = file.name
-          .replace(/[^a-zA-Z0-9._-]/g, "_")
-          .replace(/[^\w.\-]/g, "_");
+          .replace(/[^a-zA-Z0-9._-]/g, "_");
         const path = DROPBOX_FOLDER + "/" + ts + "_" + safeName;
 
         // Загружаем файл в Dropbox
@@ -411,7 +410,6 @@ async function uploadToDropbox(file) {
           body: arrayBuffer
         });
 
-        // Если токен истёк — обновляем и пробуем ещё раз
         if (uploadRes.status === 401) {
           const refreshed = await refreshDropboxToken();
           if (refreshed) {
@@ -434,8 +432,22 @@ async function uploadToDropbox(file) {
         }
 
         const uploadData = await uploadRes.json();
+        const result = await createDropboxLink(uploadData, file);
+        resolve(result);
+      } catch (err) {
+        resolve({ ok: false, error: err.message || "Не удалось загрузить файл" });
+      }
+    };
 
-        function normalizeDropboxUrl(url) {
+    reader.onerror = () => {
+      resolve({ ok: false, error: "Ошибка чтения файла" });
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function normalizeDropboxUrl(url) {
   if (!url) return "";
   return url
     .replace("www.dropbox.com", "dl.dropboxusercontent.com")
@@ -444,7 +456,6 @@ async function uploadToDropbox(file) {
 
 async function createDropboxLink(uploadData, file) {
   try {
-    // Создаём публичную shared ссылку
     const shareRes = await fetch("https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings", {
       method: "POST",
       headers: {
@@ -462,7 +473,6 @@ async function createDropboxLink(uploadData, file) {
       const shareData = await shareRes.json();
       shareUrl = normalizeDropboxUrl(shareData.url);
     } else {
-      // Если ссылка уже существует — получаем существующую
       const errData = await shareRes.json();
       if (errData.error && errData.error[".tag"] === "shared_link_already_exists") {
         const existing = await fetch("https://api.dropboxapi.com/2/sharing/list_shared_links", {
@@ -490,9 +500,8 @@ async function createDropboxLink(uploadData, file) {
       name: file.name,
       path: uploadData.path_lower
     };
-
-  } catch(err) {
-    return { ok: false, error: err.message };
+  } catch (err) {
+    return { ok: false, error: err.message || "Ошибка создания ссылки Dropbox" };
   }
 }
 
