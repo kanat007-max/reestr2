@@ -449,9 +449,21 @@ async function uploadToDropbox(file) {
 
 function normalizeDropboxUrl(url) {
   if (!url) return "";
-  return url
-    .replace("www.dropbox.com", "dl.dropboxusercontent.com")
-    .replace("?dl=0", "?raw=1");
+  try {
+    const parsed = new URL(url);
+    if (parsed.host === "www.dropbox.com" || parsed.host === "dropbox.com") {
+      parsed.host = "dl.dropboxusercontent.com";
+    }
+    if (parsed.searchParams.has("dl")) {
+      parsed.searchParams.delete("dl");
+      parsed.searchParams.set("raw", "1");
+    }
+    return parsed.toString();
+  } catch (err) {
+    return url
+      .replace("www.dropbox.com", "dl.dropboxusercontent.com")
+      .replace(/([?&])dl=[01](&|$)/, "$1raw=1$2");
+  }
 }
 
 async function createDropboxLink(uploadData, file) {
@@ -962,6 +974,37 @@ async function deleteSubject(id) {
 // ============================================================
 //  КАРТОЧКА
 // ============================================================
+// Возвращает URL для просмотра файла в браузере (без принудительной загрузки)
+function getViewUrl(url, name) {
+  if (!url) return "#";
+  const ext = (name.split(".").pop()||"").toUpperCase();
+  // Office документы — используем online viewer Microsoft
+  if (ext.match(/^(DOC|DOCX|XLS|XLSX|PPT|PPTX)$/)) {
+    return "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(url);
+  }
+  // Для PDF и изображений используем прямую ссылку (Dropbox raw or CDN)
+  if (ext === "PDF" || ext.match(/^(JPG|JPEG|PNG|GIF)$/)) return url;
+  // Для остальных типов попробуем Google Viewer fallback
+  return "https://docs.google.com/viewer?url=" + encodeURIComponent(url);
+}
+
+function openViewer(url, name){
+  if(!url) return;
+  const frame = document.getElementById('viewerFrame');
+  const title = document.getElementById('viewerTitle');
+  const openLink = document.getElementById('viewerOpenLink');
+  frame.src = url;
+  title.textContent = name || 'Просмотр документа';
+  openLink.href = url;
+  document.getElementById('viewerModal').classList.remove('hidden');
+}
+
+function closeViewer(){
+  const frame = document.getElementById('viewerFrame');
+  frame.src = '';
+  document.getElementById('viewerModal').classList.add('hidden');
+}
+
 function openCard(id) {
   const s = subjects.find(x=>x.id===id); if(!s) return;
   const photoHtml = s.photo
@@ -969,12 +1012,15 @@ function openCard(id) {
     : `<div class="card-photo-ph"><i class="ti ti-${s.type==="legal"?"building":"user"}"></i></div>`;
   const docs = Array.isArray(s.docs) ? s.docs : [];
   const docsHtml = docs.length
-    ? docs.map(d => {
+      ? docs.map(d => {
         const name = d.name||"Документ";
         const ext  = (name.split(".").pop()||"").toUpperCase();
         const icon = ext==="PDF" ? "ti-file-type-pdf" : ext.match(/^(JPG|JPEG|PNG|GIF)$/) ? "ti-photo" : "ti-file-type-doc";
         const url  = d.url||"#";
-        return `<a class="file-row" href="${url}" target="_blank" rel="noopener">
+        const viewUrl = getViewUrl(url, name);
+        const nameEsc = (name||"").replace(/'/g, "\\'");
+        const urlEsc = (viewUrl||"").replace(/'/g, "\\'");
+        return `<a class="file-row" href="#" onclick="openViewer('${urlEsc}','${nameEsc}');return false;" rel="noopener noreferrer">
           <i class="ti ${icon} file-row-icon"></i>
           <span class="file-row-name">${name}</span>
           <span class="file-row-ext">${ext||"FILE"}</span>
@@ -994,6 +1040,23 @@ function openCard(id) {
         </div>
       </div>
     </div>
+
+      <!-- VIEWER MODAL -->
+      <div class="modal-overlay hidden" id="viewerModal">
+        <div class="modal" style="max-width:900px; width:95%">
+          <div class="modal-header">
+            <h2 id="viewerTitle">Просмотр документа</h2>
+            <button class="btn" onclick="closeViewer()" style="padding:4px 8px"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="modal-body" style="padding:0">
+            <iframe id="viewerFrame" src="" style="width:100%;height:70vh;border:none;border-radius:0"></iframe>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" onclick="closeViewer()">Закрыть</button>
+            <a id="viewerOpenLink" class="btn btn-primary" href="#" target="_blank" style="margin-left:8px"><i class="ti ti-external-link"></i> Открыть в новой вкладке</a>
+          </div>
+        </div>
+      </div>
     <div class="card-sec">
       <div class="card-sec-title">Основная информация</div>
       <div class="card-grid">
