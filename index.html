@@ -349,8 +349,10 @@ tr:hover td{background:#1e2235}
       <iframe id="viewerFrame" src="" style="width:100%;height:70vh;border:none;border-radius:0"></iframe>
     </div>
     <div class="modal-footer">
-      <button class="btn" onclick="closeViewer()">Закрыть</button>
+      <a id="viewerDownloadLink" class="btn" href="#" download target="_blank" style="margin-right:8px"><i class="ti ti-download"></i> Скачать</a>
+      <button class="btn" onclick="printViewer()" style="margin-right:8px"><i class="ti ti-printer"></i> Печать</button>
       <a id="viewerOpenLink" class="btn btn-primary" href="#" target="_blank" style="margin-left:8px"><i class="ti ti-external-link"></i> Открыть в новой вкладке</a>
+      <button class="btn" onclick="closeViewer()" style="margin-left:8px">Закрыть</button>
     </div>
   </div>
 </div>
@@ -1014,9 +1016,11 @@ function openViewer(url, name){
   const frame = document.getElementById('viewerFrame');
   const title = document.getElementById('viewerTitle');
   const openLink = document.getElementById('viewerOpenLink');
+  const dlLink = document.getElementById('viewerDownloadLink');
   frame.src = url;
   title.textContent = name || 'Просмотр документа';
   openLink.href = url;
+  if (dlLink) { dlLink.href = url; dlLink.download = name || ''; }
   document.getElementById('viewerModal').classList.remove('hidden');
 }
 
@@ -1024,6 +1028,29 @@ function closeViewer(){
   const frame = document.getElementById('viewerFrame');
   frame.src = '';
   document.getElementById('viewerModal').classList.add('hidden');
+}
+
+function printViewer(){
+  const frame = document.getElementById('viewerFrame');
+  if (!frame || !frame.src) { toast('Нет файла для печати', 'error'); return; }
+  try {
+    // Попытка печати в iframe (работает для того же источника)
+    if (frame.contentWindow) {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      return;
+    }
+  } catch(e) {}
+  // Fallback: открыть в новой вкладке для ручной печати
+  const w = window.open(frame.src, '_blank');
+  if (w) {
+    w.focus();
+    // Пытаемся вызвать печать после загрузки (может не сработать для кросс-источников)
+    w.onload = function(){ try{ w.print(); }catch(e){} };
+    toast('Открылось в новой вкладке для печати', 'success');
+  } else {
+    toast('Разрешите всплывающие окна для печати', 'error');
+  }
 }
 
 function openCard(id) {
