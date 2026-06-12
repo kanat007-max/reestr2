@@ -1001,8 +1001,10 @@ function getViewUrl(url, name) {
   if (ext.match(/^(DOC|DOCX|XLS|XLSX|PPT|PPTX)$/)) {
     return "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(url);
   }
-  // Для PDF и изображений используем прямую ссылку (Dropbox raw or CDN)
-  if (ext === "PDF" || ext.match(/^(JPG|JPEG|PNG|GIF)$/)) return url;
+  // Для PDF используем встроенный просмотрщик Google, чтобы избежать принудительной загрузки
+  if (ext === "PDF") return "https://docs.google.com/viewer?url=" + encodeURIComponent(url) + "&embedded=true";
+  // Для изображений используем прямую ссылку
+  if (ext.match(/^(JPG|JPEG|PNG|GIF)$/)) return url;
   // Для остальных типов попробуем Google Viewer fallback
   return "https://docs.google.com/viewer?url=" + encodeURIComponent(url);
 }
