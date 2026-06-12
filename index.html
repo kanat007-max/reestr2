@@ -255,6 +255,16 @@ tr:hover td{background:#1e2235}
           <input type="text" id="fDirector" placeholder="Фамилия Имя Отчество">
         </div>
       </div>
+      <div class="two-col hidden" id="individualFields">
+        <div class="field">
+          <label>Должность</label>
+          <input type="text" id="fPosition" placeholder="Например: Директор, Менеджер...">
+        </div>
+        <div class="field">
+          <label>Место работы</label>
+          <input type="text" id="fWorkplace" placeholder="Название организации">
+        </div>
+      </div>
       <div class="field"><label>Детали инцидента</label>
         <textarea id="fDetails" placeholder="Опишите подробности инцидента..."></textarea>
       </div>
@@ -793,7 +803,7 @@ function openAddSubject() {
   deletedPhoto = false;
   deletedDocs = [];
   document.getElementById("subjectModalTitle").textContent = "Добавить субъект";
-  ["fType","fCategory","fName","fIin","fDirector","fDetails"].forEach(id => {
+  ["fType","fCategory","fName","fIin","fDirector","fPosition","fWorkplace","fDetails"].forEach(id => {
     const el = document.getElementById(id);
     if (el.tagName==="SELECT") el.selectedIndex=0; else el.value="";
   });
@@ -808,7 +818,9 @@ function openAddSubject() {
 }
 
 function toggleDirectorField() {
-  document.getElementById("directorField").classList.toggle("hidden", document.getElementById("fType").value!=="legal");
+  const isLegal = document.getElementById("fType").value === "legal";
+  document.getElementById("directorField").classList.toggle("hidden", !isLegal);
+  document.getElementById("individualFields").classList.toggle("hidden", isLegal);
 }
 function checkIin() {
   const v = document.getElementById("fIin").value.trim();
@@ -921,15 +933,17 @@ async function saveSubject() {
   const docs = [...existingDocs, ...uploadedFiles.docs];
 
   const payload = {
-    type:     document.getElementById("fType").value,
+    type:      document.getElementById("fType").value,
     name, iin,
-    director: document.getElementById("fDirector").value.trim(),
-    category: document.getElementById("fCategory").value,
-    details:  document.getElementById("fDetails").value.trim(),
-    photo:    photoUrl,
-    docs:     docs,
-    addedAt:  editSubjId ? orig.addedAt : new Date().toISOString(),
-    addedBy:  editSubjId ? orig.addedBy : session.email
+    director:  document.getElementById("fDirector").value.trim(),
+    position:  document.getElementById("fPosition").value.trim(),
+    workplace: document.getElementById("fWorkplace").value.trim(),
+    category:  document.getElementById("fCategory").value,
+    details:   document.getElementById("fDetails").value.trim(),
+    photo:     photoUrl,
+    docs:      docs,
+    addedAt:   editSubjId ? orig.addedAt : new Date().toISOString(),
+    addedBy:   editSubjId ? orig.addedBy : session.email
   };
 
   const r = editSubjId
@@ -952,8 +966,10 @@ function editSubject(id) {
   document.getElementById("fCategory").value = s.category;
   document.getElementById("fName").value     = s.name;
   document.getElementById("fIin").value      = s.iin;
-  document.getElementById("fDirector").value = s.director||"";
-  document.getElementById("fDetails").value  = s.details||"";
+  document.getElementById("fDirector").value  = s.director||"";
+  document.getElementById("fPosition").value  = s.position||"";
+  document.getElementById("fWorkplace").value = s.workplace||"";
+  document.getElementById("fDetails").value   = s.details||"";
 
   deletedPhoto = false;
   deletedDocs = [];
@@ -1122,6 +1138,8 @@ function openCard(id) {
         <span class="card-lbl">Тип субъекта</span><span class="card-val">${s.type==="legal"?"Юридическое лицо":"Физическое лицо"}</span>
         <span class="card-lbl">ИИН / БИН</span><span class="card-val" style="font-family:monospace">${s.iin}</span>
         ${s.type==="legal"?('<span class="card-lbl">Руководитель</span><span class="card-val">'+(s.director||"—")+'</span>'):""}
+        ${s.type==="individual"&&s.position?('<span class="card-lbl">Должность</span><span class="card-val">'+s.position+'</span>'):""}
+        ${s.type==="individual"&&s.workplace?('<span class="card-lbl">Место работы</span><span class="card-val">'+s.workplace+'</span>'):""}
         <span class="card-lbl">Категория</span><span class="card-val"><span class="cat-badge ${CAT_CLS[s.category]}">${CAT_LABELS[s.category]}</span></span>
         <span class="card-lbl">Дата добавления</span><span class="card-val">${s.addedAt?new Date(s.addedAt).toLocaleString("ru-RU"):"—"}</span>
         <span class="card-lbl">Добавил</span><span class="card-val">${s.addedBy||"—"}</span>
