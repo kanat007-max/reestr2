@@ -766,8 +766,8 @@ function renderSubjects() {
   tbody.innerHTML = rows.map(s => {
     const iconType = s.type==="legal" ? "building" : "user";
     const img = s.photo
-      ? '<img src="'+s.photo+'" class="img-thumb" onerror="this.outerHTML=\'<div class=img-placeholder><i class=ti ti-'+iconType+'></i></div>\'">'
-      : '<div class="img-placeholder"><i class="ti ti-'+iconType+'"></i></div>';
+      ? `<img src="${(s.photo+"").replace(/\"/g,'&quot;')}" class="img-thumb" onerror="this.outerHTML='<div class=img-placeholder><i class=ti ti-${iconType}></i></div>'">`
+      : `<div class="img-placeholder"><i class="ti ti-${iconType}"></i></div>`;
     const adminBtns = isAdmin
       ? `<button class="btn" onclick="editSubject('${s.id}')" style="padding:4px 7px" title="Редактировать"><i class="ti ti-edit"></i></button>
          <button class="btn btn-danger" onclick="deleteSubject('${s.id}')" style="padding:4px 7px;margin-left:3px" title="Удалить"><i class="ti ti-trash"></i></button>` : "";
@@ -1043,7 +1043,8 @@ function printViewer(){
     const w = window.open('about:blank');
     if (!w) { URL.revokeObjectURL(blobUrl); toast('Разрешите всплывающие окна', 'error'); return; }
     const name = viewerCurrentName || '';
-    const html = `<!doctype html><html><head><title>${name}</title></head><body style="margin:0"><iframe src="${blobUrl}" style="width:100%;height:100vh;border:none"></iframe><script>window.focus();function doPrint(){try{var f=window.frames[0];f.focus();f.print();}catch(e){try{window.print();}catch(e){}}}window.onload=function(){setTimeout(doPrint,500);};</script></body></html>`;
+    const safeName = (name||'').toString().replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const html = '<!doctype html><html><head><title>'+safeName+'</title></head><body style="margin:0"><iframe src="'+blobUrl+'" style="width:100%;height:100vh;border:none"></iframe><script>window.focus();function doPrint(){try{var f=window.frames[0];f.focus();f.print();}catch(e){try{window.print();}catch(e){}}}window.onload=function(){setTimeout(doPrint,500);};<\/script></body></html>';
     w.document.open();
     w.document.write(html);
     w.document.close();
@@ -1082,8 +1083,8 @@ function openCard(id) {
   const s = subjects.find(x=>x.id===id); if(!s) return;
   const cardIcon = s.type==="legal" ? "building" : "user";
   const photoHtml = s.photo
-    ? '<img src="'+s.photo+'" class="card-photo" onerror="this.outerHTML=\'<div class=card-photo-ph><i class=ti ti-'+cardIcon+'></i></div>\'">'
-    : '<div class="card-photo-ph"><i class="ti ti-'+cardIcon+'"></i></div>';
+    ? `<img src="${(s.photo+"").replace(/\"/g,'&quot;')}" class="card-photo" onerror="this.outerHTML='<div class=card-photo-ph><i class=ti ti-${cardIcon}></i></div>'">`
+    : `<div class="card-photo-ph"><i class="ti ti-${cardIcon}"></i></div>`;
   const docs = Array.isArray(s.docs) ? s.docs : [];
   const docsHtml = docs.length
       ? docs.map(d => {
