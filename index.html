@@ -349,7 +349,7 @@ tr:hover td{background:#1e2235}
       <iframe id="viewerFrame" src="" style="width:100%;height:70vh;border:none;border-radius:0"></iframe>
     </div>
     <div class="modal-footer">
-      <a id="viewerDownloadLink" class="btn" href="#" download target="_blank" style="margin-right:8px"><i class="ti ti-download"></i> Скачать</a>
+      <button id="viewerDownloadLink" class="btn" onclick="downloadViewer()" style="margin-right:8px"><i class="ti ti-download"></i> Скачать</button>
       <button class="btn" onclick="printViewer()" style="margin-right:8px"><i class="ti ti-printer"></i> Печать</button>
       <a id="viewerOpenLink" class="btn btn-primary" href="#" target="_blank" style="margin-left:8px"><i class="ti ti-external-link"></i> Открыть в новой вкладке</a>
       <button class="btn" onclick="closeViewer()" style="margin-left:8px">Закрыть</button>
@@ -377,6 +377,8 @@ let editSubjId=null, editUserId=null;
 let uploadedFiles={photo:null, docs:[]};
 let deletedPhoto=false;  // флаг удаления текущего фото
 let deletedDocs=[];       // индексы удалённых существующих документов
+let viewerCurrentUrl = "";
+let viewerCurrentName = "";
 
 // ============================================================
 //  DROPBOX UPLOAD с автообновлением токена
@@ -1011,16 +1013,16 @@ function getViewUrl(url, name) {
   return "https://docs.google.com/viewer?url=" + encodeURIComponent(url);
 }
 
-function openViewer(url, name){
-  if(!url) return;
+function openViewer(viewUrl, srcUrl, name){
+  if(!viewUrl) return;
   const frame = document.getElementById('viewerFrame');
   const title = document.getElementById('viewerTitle');
   const openLink = document.getElementById('viewerOpenLink');
-  const dlLink = document.getElementById('viewerDownloadLink');
-  frame.src = url;
-  title.textContent = name || 'Просмотр документа';
-  openLink.href = url;
-  if (dlLink) { dlLink.href = url; dlLink.download = name || ''; }
+  viewerCurrentUrl = srcUrl || viewUrl;
+  viewerCurrentName = name || '';
+  frame.src = viewUrl;
+  title.textContent = viewerCurrentName || 'Просмотр документа';
+  openLink.href = viewerCurrentUrl;
   document.getElementById('viewerModal').classList.remove('hidden');
 }
 
@@ -1031,26 +1033,48 @@ function closeViewer(){
 }
 
 function printViewer(){
-  const frame = document.getElementById('viewerFrame');
-  if (!frame || !frame.src) { toast('Нет файла для печати', 'error'); return; }
-  try {
-    // Попытка печати в iframe (работает для того же источника)
-    if (frame.contentWindow) {
-      frame.contentWindow.focus();
-      frame.contentWindow.print();
-      return;
-    }
-  } catch(e) {}
-  // Fallback: открыть в новой вкладке для ручной печати
-  const w = window.open(frame.src, '_blank');
-  if (w) {
-    w.focus();
-    // Пытаемся вызвать печать после загрузки (может не сработать для кросс-источников)
-    w.onload = function(){ try{ w.print(); }catch(e){} };
-    toast('Открылось в новой вкладке для печати', 'success');
-  } else {
-    toast('Разрешите всплывающие окна для печати', 'error');
-  }
+  if (!viewerCurrentUrl) { toast('Нет файла для печати', 'error'); return; }
+  fetch(viewerCurrentUrl).then(resp => {
+    if (!resp.ok) throw new Error('Сервер вернул ' + resp.status);
+    return resp.blob();
+  }).then(blob => {
+    const blobUrl = URL.createObjectURL(blob);
+    const w = window.open('about:blank');
+    if (!w) { URL.revokeObjectURL(blobUrl); toast('Разрешите всплывающие окна', 'error'); return; }
+    const name = viewerCurrentName || '';
+    const html = `<!doctype html><html><head><title>${name}</title></head><body style="margin:0"><iframe src="${blobUrl}" style="width:100%;height:100vh;border:none"></iframe><script>window.focus();function doPrint(){try{var f=window.frames[0];f.focus();f.print();}catch(e){try{window.print();}catch(e){}}}window.onload=function(){setTimeout(doPrint,500);};</script></body></html>`;
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+    setTimeout(()=>URL.revokeObjectURL(blobUrl), 60000);
+  }).catch(err => {
+    // Fallback: открыть исходную ссылку в новой вкладке
+    const w = window.open(viewerCurrentUrl, '_blank');
+    if (w) { w.focus(); toast('Открылось в новой вкладке для печати', 'success'); }
+    else toast('Не удалось подготовить печать: ' + (err.message||err), 'error');
+  });
+}
+
+function downloadViewer(){
+  if (!viewerCurrentUrl) { toast('Нет файла для загрузки', 'error'); return; }
+  fetch(viewerCurrentUrl).then(resp=>{
+    if (!resp.ok) throw new Error('Сервер вернул ' + resp.status);
+    return resp.blob();
+  }).then(blob=>{
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = viewerCurrentName || '';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(blobUrl), 60000);
+  }).catch(err=>{
+    // fallback: открыть исходную ссылку
+    const w = window.open(viewerCurrentUrl, '_blank');
+    if (w) { w.focus(); toast('Открылось в новой вкладке для загрузки', 'success'); }
+    else toast('Не удалось скачать файл: ' + (err.message||err), 'error');
+  });
 }
 
 function openCard(id) {
@@ -1067,8 +1091,9 @@ function openCard(id) {
         const url  = d.url||"#";
         const viewUrl = getViewUrl(url, name);
         const nameEsc = (name||"").replace(/'/g, "\\'");
-        const urlEsc = (viewUrl||"").replace(/'/g, "\\'");
-        return `<a class="file-row" href="#" onclick="openViewer('${urlEsc}','${nameEsc}');return false;" rel="noopener noreferrer">
+        const viewEsc = (viewUrl||"").replace(/'/g, "\\'");
+        const srcEsc = (url||"").replace(/'/g, "\\'");
+        return `<a class="file-row" href="#" onclick="openViewer('${viewEsc}','${srcEsc}','${nameEsc}');return false;" rel="noopener noreferrer">
           <i class="ti ${icon} file-row-icon"></i>
           <span class="file-row-name">${name}</span>
           <span class="file-row-ext">${ext||"FILE"}</span>
