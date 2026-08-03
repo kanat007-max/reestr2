@@ -179,7 +179,7 @@ tr:hover td{background:#1e2235}
     <div class="content">
       <div id="subjectsView">
         <div class="toolbar">
-          <div class="search-box"><i class="ti ti-search"></i><input type="text" id="searchInput" placeholder="Поиск по ФИО, ИИН/БИН, месту работы, категории..." oninput="renderSubjects()"></div>
+          <div class="search-box"><i class="ti ti-search"></i><input type="text" id="searchInput" placeholder="Поиск по наименованию, ФИО или ИИН/БИН..." oninput="renderSubjects()"></div>
           <button class="btn" onclick="loadSubjects()" title="Обновить данные"><i class="ti ti-refresh"></i></button>
           <button class="btn btn-primary" onclick="openAddSubject()"><i class="ti ti-plus"></i> Добавить субъект</button>
         </div>
@@ -254,32 +254,6 @@ tr:hover td{background:#1e2235}
           <label>Руководитель ФИО</label>
           <input type="text" id="fDirector" placeholder="Фамилия Имя Отчество">
         </div>
-      </div>
-      <div class="two-col" id="individualFields" style="display:none">
-        <div class="field">
-          <label>Должность</label>
-          <input type="text" id="fPosition" placeholder="Например: Директор, Менеджер...">
-        </div>
-      </div>
-      <div class="field">
-        <label>Место работы</label>
-        <select id="fWorkplace">
-          <option value="">— Выберите организацию —</option>
-            <option value="АО «Трест САЭМ»">АО «Трест САЭМ»</option>
-            <option value="АО «ЦЕНТРКАЗЭНЕРГОМОНТАЖ»">АО «ЦЕНТРКАЗЭНЕРГОМОНТАЖ»</option>
-            <option value="ТОО «САЭМ Павлодар»">ТОО «САЭМ Павлодар»</option>
-            <option value="ТОО «САЭМ Петропавловск»">ТОО «САЭМ Петропавловск»</option>
-            <option value="ТОО «Строительное Управление Энергострой»">ТОО «Строительное Управление Энергострой»</option>
-            <option value="АО «ЦАЭК»">АО «ЦАЭК»</option>
-            <option value="АО «ПАВЛОДАРЭНЕРГО»">АО «ПАВЛОДАРЭНЕРГО»</option>
-            <option value="АО «Павлодарское РЭК»">АО «Павлодарское РЭК»</option>
-            <option value="ТОО «Павлодарские тепловые сети»">ТОО «Павлодарские тепловые сети»</option>
-            <option value="ТОО «ЦАТЭК Green Energy»">ТОО «ЦАТЭК Green Energy»</option>
-            <option value="АО «СЕВКАЗЭНЕРГО»">АО «СЕВКАЗЭНЕРГО»</option>
-            <option value="АО «Северо-Казахстанская РЭК»">АО «Северо-Казахстанская РЭК»</option>
-            <option value="ТОО «Петропавловские Тепловые Сети»">ТОО «Петропавловские Тепловые Сети»</option>
-            <option value="АО «Акмолинская РЭК»">АО «Акмолинская РЭК»</option>
-        </select>
       </div>
       <div class="field"><label>Детали инцидента</label>
         <textarea id="fDetails" placeholder="Опишите подробности инцидента..."></textarea>
@@ -783,17 +757,7 @@ async function loadSubjects() {
 function renderSubjects() {
   const q = (document.getElementById("searchInput").value||"").toLowerCase();
   const isAdmin = session && session.role==="admin";
-  const rows = subjects.filter(s => {
-    if (!q) return true;
-    const ql = q.toLowerCase();
-    return (
-      s.name.toLowerCase().includes(ql) ||
-      String(s.iin).includes(ql) ||
-      (s.workplace||"").toLowerCase().includes(ql) ||
-      (CAT_LABELS[s.category]||"").toLowerCase().includes(ql) ||
-      (s.position||"").toLowerCase().includes(ql)
-    );
-  });
+  const rows = subjects.filter(s => !q || s.name.toLowerCase().includes(q) || String(s.iin).includes(q));
   const tbody = document.getElementById("subjectsBody");
   if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><i class="ti ti-database-off"></i>${q?"Ничего не найдено":"База данных пуста. Добавьте первый субъект."}</div></td></tr>`;
@@ -809,10 +773,7 @@ function renderSubjects() {
          <button class="btn btn-danger" onclick="deleteSubject('${s.id}')" style="padding:4px 7px;margin-left:3px" title="Удалить"><i class="ti ti-trash"></i></button>` : "";
     return `<tr>
       <td>${img}</td>
-      <td>
-        <a href="#" onclick="openCard('${s.id}');return false" style="color:#a5b4fc;text-decoration:none;font-weight:500">${s.name}</a>
-        ${s.workplace?`<div style="font-size:11px;color:#8892a4;margin-top:2px">${s.workplace}</div>`:""}
-      </td>
+      <td><a href="#" onclick="openCard('${s.id}');return false" style="color:#a5b4fc;text-decoration:none;font-weight:500">${s.name}</a></td>
       <td><span class="type-badge">${s.type==="individual"?"Физ. лицо":"Юр. лицо"}</span></td>
       <td style="font-family:monospace;color:#94a3b8;font-size:12px">${s.iin}</td>
       <td><span class="cat-badge ${CAT_CLS[s.category]}">${CAT_LABELS[s.category]}</span></td>
@@ -832,7 +793,7 @@ function openAddSubject() {
   deletedPhoto = false;
   deletedDocs = [];
   document.getElementById("subjectModalTitle").textContent = "Добавить субъект";
-  ["fType","fCategory","fName","fIin","fDirector","fPosition","fWorkplace","fDetails"].forEach(id => {
+  ["fType","fCategory","fName","fIin","fDirector","fDetails"].forEach(id => {
     const el = document.getElementById(id);
     if (el.tagName==="SELECT") el.selectedIndex=0; else el.value="";
   });
@@ -847,11 +808,7 @@ function openAddSubject() {
 }
 
 function toggleDirectorField() {
-  const isLegal = document.getElementById("fType").value === "legal";
-  document.getElementById("directorField").classList.toggle("hidden", !isLegal);
-  // Должность — только для физ. лиц
-  const indFields = document.getElementById("individualFields");
-  indFields.style.display = isLegal ? "none" : "grid";
+  document.getElementById("directorField").classList.toggle("hidden", document.getElementById("fType").value!=="legal");
 }
 function checkIin() {
   const v = document.getElementById("fIin").value.trim();
@@ -964,17 +921,15 @@ async function saveSubject() {
   const docs = [...existingDocs, ...uploadedFiles.docs];
 
   const payload = {
-    type:      document.getElementById("fType").value,
+    type:     document.getElementById("fType").value,
     name, iin,
-    director:  document.getElementById("fDirector").value.trim(),
-    position:  document.getElementById("fPosition").value.trim(),
-    workplace: document.getElementById("fWorkplace").value,
-    category:  document.getElementById("fCategory").value,
-    details:   document.getElementById("fDetails").value.trim(),
-    photo:     photoUrl,
-    docs:      docs,
-    addedAt:   editSubjId ? orig.addedAt : new Date().toISOString(),
-    addedBy:   editSubjId ? orig.addedBy : session.email
+    director: document.getElementById("fDirector").value.trim(),
+    category: document.getElementById("fCategory").value,
+    details:  document.getElementById("fDetails").value.trim(),
+    photo:    photoUrl,
+    docs:     docs,
+    addedAt:  editSubjId ? orig.addedAt : new Date().toISOString(),
+    addedBy:  editSubjId ? orig.addedBy : session.email
   };
 
   const r = editSubjId
@@ -997,10 +952,8 @@ function editSubject(id) {
   document.getElementById("fCategory").value = s.category;
   document.getElementById("fName").value     = s.name;
   document.getElementById("fIin").value      = s.iin;
-  document.getElementById("fDirector").value  = s.director||"";
-  document.getElementById("fPosition").value  = s.position||"";
-  document.getElementById("fWorkplace").value = s.workplace||"";
-  document.getElementById("fDetails").value   = s.details||"";
+  document.getElementById("fDirector").value = s.director||"";
+  document.getElementById("fDetails").value  = s.details||"";
 
   deletedPhoto = false;
   deletedDocs = [];
@@ -1169,8 +1122,6 @@ function openCard(id) {
         <span class="card-lbl">Тип субъекта</span><span class="card-val">${s.type==="legal"?"Юридическое лицо":"Физическое лицо"}</span>
         <span class="card-lbl">ИИН / БИН</span><span class="card-val" style="font-family:monospace">${s.iin}</span>
         ${s.type==="legal"?('<span class="card-lbl">Руководитель</span><span class="card-val">'+(s.director||"—")+'</span>'):""}
-        ${s.type==="individual"&&s.position?('<span class="card-lbl">Должность</span><span class="card-val">'+s.position+'</span>'):""}
-        ${s.workplace?('<span class="card-lbl">Место работы</span><span class="card-val">'+s.workplace+'</span>'):""}
         <span class="card-lbl">Категория</span><span class="card-val"><span class="cat-badge ${CAT_CLS[s.category]}">${CAT_LABELS[s.category]}</span></span>
         <span class="card-lbl">Дата добавления</span><span class="card-val">${s.addedAt?new Date(s.addedAt).toLocaleString("ru-RU"):"—"}</span>
         <span class="card-lbl">Добавил</span><span class="card-val">${s.addedBy||"—"}</span>
